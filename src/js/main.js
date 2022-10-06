@@ -207,7 +207,7 @@ const checkBombAround = (e, rowLength) => {
 		if (bombs.includes(id + rowLength - 1)) {
 			bombsNumber++;
 		}
-	} else if (id - rowLength < rowLength) {
+	} else if (id - rowLength < 0) {
 		// side top check
 		if (bombs.includes(id - 1)) {
 			bombsNumber++;
@@ -224,6 +224,7 @@ const checkBombAround = (e, rowLength) => {
 		if (bombs.includes(id + rowLength - 1)) {
 			bombsNumber++;
 		}
+		console.log('pokaz mnie to');
 	} else if (id > rowLength * rowLength - rowLength) {
 		// side bottom check
 		if (bombs.includes(id - 1)) {
