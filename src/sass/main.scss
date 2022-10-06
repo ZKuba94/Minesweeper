@@ -112,9 +112,9 @@ body {
 		&__item-counter-time::before {
 			content: '000';
 		}
-		&__item-counter-mines::before {
-			content: '010';
-		}
+		// &__item-counter-mines::before {
+		// 	content: '010';
+		// }
 		&__status-face {
 			border: #333 1px solid;
 			padding: 0.5rem;
@@ -193,15 +193,6 @@ body {
 				content: '';
 			}
 		}
-		.show-number {
-			background-color: rgba(139, 141, 161, 0.6);
-			-webkit-box-shadow: inset 0px 0px 24px 0px rgba(58, 58, 58, 0.31);
-			-moz-box-shadow: inset 0px 0px 24px 0px rgba(58, 58, 58, 0.31);
-			box-shadow: inset 0px 0px 24px 0px rgba(58, 58, 58, 0.31);
-			&::before {
-				content: '%';
-			}
-		}
 		.show-bomb {
 			background-color: rgba(139, 141, 161, 0.6);
 			-webkit-box-shadow: inset 0px 0px 24px 0px rgba(58, 58, 58, 0.31);
@@ -223,6 +214,61 @@ body {
 		.put-flag {
 			&::before {
 				content: '🚩';
+			}
+		}
+		.wrong-bet {
+			background-color: rgba(139, 141, 161, 0.6);
+			-webkit-box-shadow: inset 0px 0px 24px 0px rgba(58, 58, 58, 0.31);
+			-moz-box-shadow: inset 0px 0px 24px 0px rgba(58, 58, 58, 0.31);
+			box-shadow: inset 0px 0px 24px 0px rgba(58, 58, 58, 0.31);
+			&::before {
+				content: '❗️';
+			}
+		}
+		.show-number {
+			background-color: rgba(139, 141, 161, 0.6);
+			-webkit-box-shadow: inset 0px 0px 24px 0px rgba(58, 58, 58, 0.31);
+			-moz-box-shadow: inset 0px 0px 24px 0px rgba(58, 58, 58, 0.31);
+			box-shadow: inset 0px 0px 24px 0px rgba(58, 58, 58, 0.31);
+			.one {
+				&::before {
+					content: '1';
+				}
+			}
+			.two {
+				&::before {
+					content: '2';
+				}
+			}
+			.three {
+				&::before {
+					content: '3';
+				}
+			}
+			.four {
+				&::before {
+					content: '4';
+				}
+			}
+			.five {
+				&::before {
+					content: '5';
+				}
+			}
+			.six {
+				&::before {
+					content: '6';
+				}
+			}
+			.seven {
+				&::before {
+					content: '7';
+				}
+			}
+			.eight {
+				&::before {
+					content: '8';
+				}
 			}
 		}
 	}
