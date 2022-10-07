@@ -4,6 +4,8 @@ const gameList = document.querySelector('.navbar__list-game');
 const navItems = gameList.querySelectorAll('.navbar__list__item');
 const counterMines = document.querySelector('.counter-mines');
 
+const plateElements = gamePlate.getElementsByClassName('game-box__plate__element');
+
 const begginer = [8, 8, 10];
 const intermediate = [16, 16, 40];
 const expert = [31, 16, 99];
@@ -228,7 +230,6 @@ const checkBombAround = (i, rowLength) => {
 		if (bombs.includes(i + rowLength - 1)) {
 			bombsNumber++;
 		}
-		console.log('pokaz mnie to');
 	} else if (i > rowLength * rowLength - rowLength) {
 		// side bottom check
 		if (bombs.includes(i - 1)) {
@@ -284,67 +285,183 @@ const checkBombAround = (i, rowLength) => {
 		// 	plateElements[id + rowLength - 1].classList.add(`show-number`);
 		// }
 	}
-
-	// if (bombsNumber === 0) {
-	// }
-	// e.target.classList.add(`show-number-${bombsNumber}`);
-	// bombsNumber = 0;
-	// const checkBoxesAgain = () => {};
 };
 
-const showEmpty = e => {
+const showEmptyForZeroBombs = (i, rowLength) => {
+	console.log(i);
+	if (i === 0) {
+		if (!plateElements[i + 1].classList.contains('show-empty')) {
+			showEmpty(i + 1, rowLength);
+		}
+		if (!plateElements[i + 1 + rowLength].classList.contains('show-empty')) {
+			showEmpty(i + 1 + rowLength, rowLength);
+		}
+		if (!plateElements[i + rowLength].classList.contains('show-empty')) {
+			showEmpty(i + rowLength, rowLength);
+		}
+	} else if (i === rowLength - 1) {
+		if (!plateElements[i - 1].classList.contains('show-empty')) {
+			showEmpty(i - 1, rowLength);
+		}
+		if (!plateElements[i - 1 + rowLength].classList.contains('show-empty')) {
+			showEmpty(i - 1 + rowLength, rowLength);
+		}
+		if (!plateElements[i + rowLength].classList.contains('show-empty')) {
+			showEmpty(i + rowLength, rowLength);
+		}
+	} else if (i === rowLength * rowLength - rowLength) {
+		if (!plateElements[i + 1].classList.contains('show-empty')) {
+			showEmpty(i + 1, rowLength);
+		}
+		if (!plateElements[i - rowLength].classList.contains('show-empty')) {
+			showEmpty(i - rowLength, rowLength);
+		}
+		if (!plateElements[i - 1 - rowLength].classList.contains('show-empty')) {
+			showEmpty(i - 1 - rowLength, rowLength);
+		}
+	} else if (i === rowLength * rowLength - 1) {
+		if (!plateElements[i - 1].classList.contains('show-empty')) {
+			showEmpty(i - 1, rowLength);
+		}
+		if (!plateElements[i - rowLength].classList.contains('show-empty')) {
+			showEmpty(i - rowLength, rowLength);
+		}
+		if (!plateElements[i - 1 - rowLength].classList.contains('show-empty')) {
+			showEmpty(i - 1 - rowLength, rowLength);
+		}
+	} else if (i % rowLength === 0) {
+		if (!plateElements[i - rowLength].classList.contains('show-empty')) {
+			showEmpty(i - rowLength, rowLength);
+		}
+		if (!plateElements[i + 1 - rowLength].classList.contains('show-empty')) {
+			showEmpty(i + 1 - rowLength, rowLength);
+		}
+		if (!plateElements[i + 1].classList.contains('show-empty')) {
+			showEmpty(i + 1, rowLength);
+		}
+		if (!plateElements[i + rowLength].classList.contains('show-empty')) {
+			showEmpty(i + rowLength, rowLength);
+		}
+		if (!plateElements[i + 1 + rowLength].classList.contains('show-empty')) {
+			showEmpty(i + 1 + rowLength, rowLength);
+		}
+	} else if ((i + 1) % rowLength === 0) {
+		if (!plateElements[i - rowLength].classList.contains('show-empty')) {
+			showEmpty(i - rowLength, rowLength);
+		}
+		if (!plateElements[i - rowLength - 1].classList.contains('show-empty')) {
+			showEmpty(i - rowLength - 1, rowLength);
+		}
+		if (!plateElements[i - 1].classList.contains('show-empty')) {
+			showEmpty(i - 1, rowLength);
+		}
+		if (!plateElements[i + rowLength].classList.contains('show-empty')) {
+			showEmpty(i + rowLength, rowLength);
+		}
+		if (!plateElements[i + rowLength - 1].classList.contains('show-empty')) {
+			showEmpty(i + rowLength - 1, rowLength);
+		}
+	} else if (i - rowLength < 0) {
+		if (!plateElements[i - 1].classList.contains('show-empty')) {
+			showEmpty(i - 1, rowLength);
+		}
+		if (!plateElements[i + 1].classList.contains('show-empty')) {
+			showEmpty(i + 1, rowLength);
+		}
+		if (!plateElements[i + rowLength + 1].classList.contains('show-empty')) {
+			showEmpty(i + rowLength + 1, rowLength);
+		}
+		if (!plateElements[i + rowLength].classList.contains('show-empty')) {
+			showEmpty(i + rowLength, rowLength);
+		}
+		if (!plateElements[i + rowLength - 1].classList.contains('show-empty')) {
+			showEmpty(i + rowLength - 1, rowLength);
+		}
+	} else if (i > rowLength * rowLength - rowLength) {
+		if (!plateElements[i - 1].classList.contains('show-empty')) {
+			showEmpty(i - 1, rowLength);
+		}
+		if (!plateElements[i + 1].classList.contains('show-empty')) {
+			showEmpty(i + 1, rowLength);
+		}
+		if (!plateElements[i - rowLength + 1].classList.contains('show-empty')) {
+			showEmpty(i - rowLength + 1, rowLength);
+		}
+		if (!plateElements[i - rowLength].classList.contains('show-empty')) {
+			showEmpty(i - rowLength, rowLength);
+		}
+		if (!plateElements[i - rowLength - 1].classList.contains('show-empty')) {
+			showEmpty(i - rowLength - 1, rowLength);
+		}
+	} else {
+		if (!plateElements[i - 1].classList.contains('show-empty')) {
+			showEmpty(i - 1, rowLength);
+		}
+		if (!plateElements[i + 1].classList.contains('show-empty')) {
+			showEmpty(i + 1, rowLength);
+		}
+		if (!plateElements[i - rowLength + 1].classList.contains('show-empty')) {
+			showEmpty(i - rowLength + 1, rowLength);
+		}
+		if (!plateElements[i - rowLength].classList.contains('show-empty')) {
+			showEmpty(i - rowLength, rowLength);
+		}
+		if (!plateElements[i - rowLength - 1].classList.contains('show-empty')) {
+			showEmpty(i - rowLength - 1, rowLength);
+		}
+		if (!plateElements[i + rowLength - 1].classList.contains('show-empty')) {
+			showEmpty(i + rowLength - 1, rowLength);
+		}
+		if (!plateElements[i + rowLength].classList.contains('show-empty')) {
+			showEmpty(i + rowLength, rowLength);
+		}
+		if (!plateElements[i + rowLength + 1].classList.contains('show-empty')) {
+			showEmpty(i + rowLength + 1, rowLength);
+		}
+	}
+};
+
+const showEmpty = (e, rowLength) => {
 	// e.target.classList.add('show-empty');
 	// checkBombAround(e, chosenLevel[0]);
-	if (boxes[e.target.id].bombsAround === 0) {
-		e.target.classList.add('show-empty');
+	let i = Number.parseFloat(e);
+	if (boxes[i].bombsAround === 0) {
+		plateElements[i].classList.add('show-empty');
+		// checkBombAround(e, chosenLevel[0]);
+		showEmptyForZeroBombs(i, rowLength);
+	} else if (boxes[i].bombsAround === 1) {
+		plateElements[i].classList.add('show-number');
+		plateElements[i].classList.add('show-number-1');
+	} else if (boxes[i].bombsAround === 2) {
+		plateElements[i].classList.add('show-number');
+		plateElements[i].classList.add('show-number-2');
+	} else if (boxes[i].bombsAround === 3) {
+		plateElements[i].classList.add('show-number');
+		plateElements[i].classList.add('show-number-3');
+	} else if (boxes[i].bombsAround === 4) {
+		plateElements[i].classList.add('show-number');
+		plateElements[i].classList.add('show-number-4');
+	} else if (boxes[i].bombsAround === 5) {
+		plateElements[i].classList.add('show-number');
+		plateElements[i].classList.add('show-number-5');
+	} else if (boxes[i].bombsAround === 6) {
+		plateElements[i].classList.add('show-number');
+		plateElements[i].classList.add('show-number-6');
+	} else if (boxes[i].bombsAround === 7) {
+		plateElements[i].classList.add('show-number');
+		plateElements[i].classList.add('show-number-7');
+	} else if (boxes[i].bombsAround === 8) {
+		plateElements[i].classList.add('show-number');
+		plateElements[i].classList.add('show-number-8');
 	}
-	if (boxes[e.target.id].bombsAround === 1) {
-		console.log('dziala');
-		e.target.classList.add('show-number');
-		e.target.classList.add('show-number-1');
-	}
-	if (boxes[e.target.id].bombsAround === 2) {
-		console.log('dziala');
-		e.target.classList.add('show-number');
-		e.target.classList.add('show-number-2');
-	}
-	if (boxes[e.target.id].bombsAround === 3) {
-		console.log('dziala');
-		e.target.classList.add('show-number');
-		e.target.classList.add('show-number-3');
-	}
-	if (boxes[e.target.id].bombsAround === 4) {
-		console.log('dziala');
-		e.target.classList.add('show-number');
-		e.target.classList.add('show-number-4');
-	}
-	if (boxes[e.target.id].bombsAround === 5) {
-		console.log('dziala');
-		e.target.classList.add('show-number');
-		e.target.classList.add('show-number-5');
-	}
-	if (boxes[e.target.id].bombsAround === 6) {
-		console.log('dziala');
-		e.target.classList.add('show-number');
-		e.target.classList.add('show-number-6');
-	}
-	if (boxes[e.target.id].bombsAround === 7) {
-		console.log('dziala');
-		e.target.classList.add('show-number');
-		e.target.classList.add('show-number-7');
-	}
-	if (boxes[e.target.id].bombsAround === 8) {
-		console.log('dziala');
-		e.target.classList.add('show-number');
-		e.target.classList.add('show-number-8');
-	}
+	return;
 };
 
 const leftClick = e => {
 	if (e.target.classList.contains('put-flag')) {
 		e.preventDefault();
 	} else if (boxes[e.target.id].bomb === false) {
-		showEmpty(e);
+		showEmpty(e.target.id, chosenLevel[0]);
 	} else if (boxes[e.target.id].bomb === true) {
 		e.target.classList.add('show-trigger');
 		showAll();
