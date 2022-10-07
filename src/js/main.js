@@ -8,6 +8,7 @@ const begginer = [8, 8, 10];
 const intermediate = [16, 16, 40];
 const expert = [31, 16, 99];
 
+let bombsNumber = 0;
 let bombs = [];
 let boxes = [];
 let chosenLevel = begginer;
@@ -28,15 +29,18 @@ const shuffle = (boxesAmount, bombsAmount) => {
 };
 
 class GamePlate {
-	constructor(id, bomb) {
+	constructor(id, bomb, bombsAround) {
 		this.id = id;
 		this.bomb = bomb;
+		this.bombsAround = bombsAround;
 	}
 }
 
 const createGamePlate = boxesAmount => {
 	for (let i = 0; i < boxesAmount; i++) {
-		boxes[i] = new GamePlate(i, false);
+		checkBombAround(i, chosenLevel[0]);
+		boxes[i] = new GamePlate(i, false, bombsNumber);
+		bombsNumber = 0;
 	}
 };
 
@@ -125,158 +129,215 @@ const showAll = () => {
 	}
 };
 
-let bombsNumber = 0;
+const checkBombAround = (i, rowLength) => {
+	// let id = Number.parseFloat(e.target.id);
+	// const plateElements = gamePlate.getElementsByClassName('game-box__plate__element');
 
-const checkBombAround = (e, rowLength) => {
-	let id = Number.parseFloat(e.target.id);
-	if (id === 0) {
+	if (i === 0) {
 		// top-left corner check
-		if (bombs.includes(id + 1)) {
+		if (bombs.includes(i + 1)) {
 			bombsNumber++;
 		}
-		if (bombs.includes(id + rowLength)) {
+		if (bombs.includes(i + rowLength)) {
 			bombsNumber++;
 		}
-		if (bombs.includes(id + (rowLength + 1))) {
+		if (bombs.includes(i + (rowLength + 1))) {
 			bombsNumber++;
 		}
-	} else if (id === rowLength - 1) {
+	} else if (i === rowLength - 1) {
 		// top-right corner check
-		if (bombs.includes(id - 1)) {
+		if (bombs.includes(i - 1)) {
 			bombsNumber++;
 		}
-		if (bombs.includes(id + rowLength)) {
+		if (bombs.includes(i + rowLength)) {
 			bombsNumber++;
 		}
-		if (bombs.includes(id + (rowLength - 1))) {
+		if (bombs.includes(i + (rowLength - 1))) {
 			bombsNumber++;
 		}
-	} else if (id === rowLength * rowLength - rowLength) {
+	} else if (i === rowLength * rowLength - rowLength) {
 		// bottom-left corner check
-		if (bombs.includes(id + 1)) {
+		if (bombs.includes(i + 1)) {
 			bombsNumber++;
 		}
-		if (bombs.includes(id - rowLength)) {
+		if (bombs.includes(i - rowLength)) {
 			bombsNumber++;
 		}
-		if (bombs.includes(id - (rowLength - 1))) {
+		if (bombs.includes(i - (rowLength - 1))) {
 			bombsNumber++;
 		}
-	} else if (id === rowLength * rowLength - 1) {
+	} else if (i === rowLength * rowLength - 1) {
 		// bottom-right corner check
-		if (bombs.includes(id - 1)) {
+		if (bombs.includes(i - 1)) {
 			bombsNumber++;
 		}
-		if (bombs.includes(id - rowLength)) {
+		if (bombs.includes(i - rowLength)) {
 			bombsNumber++;
 		}
-		if (bombs.includes(id - (rowLength + 1))) {
+		if (bombs.includes(i - (rowLength + 1))) {
 			bombsNumber++;
 		}
-	} else if (id % rowLength === 0) {
+	} else if (i % rowLength === 0) {
 		// side left check
-		if (bombs.includes(id - rowLength)) {
+		if (bombs.includes(i - rowLength)) {
 			bombsNumber++;
 		}
-		if (bombs.includes(id - rowLength + 1)) {
+		if (bombs.includes(i - rowLength + 1)) {
 			bombsNumber++;
 		}
-		if (bombs.includes(id + 1)) {
+		if (bombs.includes(i + 1)) {
 			bombsNumber++;
 		}
-		if (bombs.includes(id + rowLength)) {
+		if (bombs.includes(i + rowLength)) {
 			bombsNumber++;
 		}
-		if (bombs.includes(id + rowLength + 1)) {
+		if (bombs.includes(i + rowLength + 1)) {
 			bombsNumber++;
 		}
-	} else if ((id + 1) % rowLength === 0) {
+	} else if ((i + 1) % rowLength === 0) {
 		// side right check
-		if (bombs.includes(id - rowLength)) {
+		if (bombs.includes(i - rowLength)) {
 			bombsNumber++;
 		}
-		if (bombs.includes(id - rowLength - 1)) {
+		if (bombs.includes(i - rowLength - 1)) {
 			bombsNumber++;
 		}
-		if (bombs.includes(id - 1)) {
+		if (bombs.includes(i - 1)) {
 			bombsNumber++;
 		}
-		if (bombs.includes(id + rowLength)) {
+		if (bombs.includes(i + rowLength)) {
 			bombsNumber++;
 		}
-		if (bombs.includes(id + rowLength - 1)) {
+		if (bombs.includes(i + rowLength - 1)) {
 			bombsNumber++;
 		}
-	} else if (id - rowLength < 0) {
+	} else if (i - rowLength < 0) {
 		// side top check
-		if (bombs.includes(id - 1)) {
+		if (bombs.includes(i - 1)) {
 			bombsNumber++;
 		}
-		if (bombs.includes(id + 1)) {
+		if (bombs.includes(i + 1)) {
 			bombsNumber++;
 		}
-		if (bombs.includes(id + rowLength + 1)) {
+		if (bombs.includes(i + rowLength + 1)) {
 			bombsNumber++;
 		}
-		if (bombs.includes(id + rowLength)) {
+		if (bombs.includes(i + rowLength)) {
 			bombsNumber++;
 		}
-		if (bombs.includes(id + rowLength - 1)) {
+		if (bombs.includes(i + rowLength - 1)) {
 			bombsNumber++;
 		}
 		console.log('pokaz mnie to');
-	} else if (id > rowLength * rowLength - rowLength) {
+	} else if (i > rowLength * rowLength - rowLength) {
 		// side bottom check
-		if (bombs.includes(id - 1)) {
+		if (bombs.includes(i - 1)) {
 			bombsNumber++;
 		}
-		if (bombs.includes(id + 1)) {
+		if (bombs.includes(i + 1)) {
 			bombsNumber++;
 		}
-		if (bombs.includes(id - rowLength + 1)) {
+		if (bombs.includes(i - rowLength + 1)) {
 			bombsNumber++;
 		}
-		if (bombs.includes(id - rowLength)) {
+		if (bombs.includes(i - rowLength)) {
 			bombsNumber++;
 		}
-		if (bombs.includes(id - rowLength - 1)) {
+		if (bombs.includes(i - rowLength - 1)) {
 			bombsNumber++;
 		}
 	} else {
 		// the rest of boxes
-		if (bombs.includes(id - 1)) {
+		if (bombs.includes(i - 1)) {
 			bombsNumber++;
 		}
-		if (bombs.includes(id + 1)) {
+		if (bombs.includes(i + 1)) {
 			bombsNumber++;
 		}
-		if (bombs.includes(id - rowLength + 1)) {
+		if (bombs.includes(i - rowLength + 1)) {
 			bombsNumber++;
 		}
-		if (bombs.includes(id - rowLength)) {
+		if (bombs.includes(i - rowLength)) {
 			bombsNumber++;
 		}
-		if (bombs.includes(id - rowLength - 1)) {
+		if (bombs.includes(i - rowLength - 1)) {
 			bombsNumber++;
 		}
-		if (bombs.includes(id + rowLength + 1)) {
+		if (bombs.includes(i + rowLength + 1)) {
 			bombsNumber++;
 		}
-		if (bombs.includes(id + rowLength)) {
+		if (bombs.includes(i + rowLength)) {
 			bombsNumber++;
 		}
-		if (bombs.includes(id + rowLength - 1)) {
+		if (bombs.includes(i + rowLength - 1)) {
 			bombsNumber++;
 		}
+		// if (bombsNumber === 0) {
+		// 	plateElements[id].classList.add(`show-number`);
+		// 	plateElements[id - 1].classList.add(`show-number`);
+		// 	plateElements[id + 1].classList.add(`show-number`);
+		// 	plateElements[id - rowLength + 1].classList.add(`show-number`);
+		// 	plateElements[id - rowLength].classList.add(`show-number`);
+		// 	plateElements[id - rowLength - 1].classList.add(`show-number`);
+		// 	plateElements[id + rowLength + 1].classList.add(`show-number`);
+		// 	plateElements[id + rowLength].classList.add(`show-number`);
+		// 	plateElements[id + rowLength - 1].classList.add(`show-number`);
+		// }
 	}
 
-	e.target.innerHTML = bombsNumber;
-	bombsNumber = 0;
+	// if (bombsNumber === 0) {
+	// }
+	// e.target.classList.add(`show-number-${bombsNumber}`);
+	// bombsNumber = 0;
+	// const checkBoxesAgain = () => {};
 };
 
 const showEmpty = e => {
-	e.target.classList.add('show-empty');
-	checkBombAround(e, chosenLevel[0]);
+	// e.target.classList.add('show-empty');
+	// checkBombAround(e, chosenLevel[0]);
+	if (boxes[e.target.id].bombsAround === 0) {
+		e.target.classList.add('show-empty');
+	}
+	if (boxes[e.target.id].bombsAround === 1) {
+		console.log('dziala');
+		e.target.classList.add('show-number');
+		e.target.classList.add('show-number-1');
+	}
+	if (boxes[e.target.id].bombsAround === 2) {
+		console.log('dziala');
+		e.target.classList.add('show-number');
+		e.target.classList.add('show-number-2');
+	}
+	if (boxes[e.target.id].bombsAround === 3) {
+		console.log('dziala');
+		e.target.classList.add('show-number');
+		e.target.classList.add('show-number-3');
+	}
+	if (boxes[e.target.id].bombsAround === 4) {
+		console.log('dziala');
+		e.target.classList.add('show-number');
+		e.target.classList.add('show-number-4');
+	}
+	if (boxes[e.target.id].bombsAround === 5) {
+		console.log('dziala');
+		e.target.classList.add('show-number');
+		e.target.classList.add('show-number-5');
+	}
+	if (boxes[e.target.id].bombsAround === 6) {
+		console.log('dziala');
+		e.target.classList.add('show-number');
+		e.target.classList.add('show-number-6');
+	}
+	if (boxes[e.target.id].bombsAround === 7) {
+		console.log('dziala');
+		e.target.classList.add('show-number');
+		e.target.classList.add('show-number-7');
+	}
+	if (boxes[e.target.id].bombsAround === 8) {
+		console.log('dziala');
+		e.target.classList.add('show-number');
+		e.target.classList.add('show-number-8');
+	}
 };
 
 const leftClick = e => {

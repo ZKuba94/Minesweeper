@@ -189,9 +189,9 @@ body {
 			-webkit-box-shadow: inset 0px 0px 24px 0px rgba(58, 58, 58, 0.31);
 			-moz-box-shadow: inset 0px 0px 24px 0px rgba(58, 58, 58, 0.31);
 			box-shadow: inset 0px 0px 24px 0px rgba(58, 58, 58, 0.31);
-			&::before {
-				content: '';
-			}
+			// &::before {
+			// 	content: '';
+			// }
 		}
 		.show-bomb {
 			background-color: rgba(139, 141, 161, 0.6);
@@ -230,8 +230,44 @@ body {
 			-webkit-box-shadow: inset 0px 0px 24px 0px rgba(58, 58, 58, 0.31);
 			-moz-box-shadow: inset 0px 0px 24px 0px rgba(58, 58, 58, 0.31);
 			box-shadow: inset 0px 0px 24px 0px rgba(58, 58, 58, 0.31);
-			&::before {
+
+			&-0 {
+				background-color: rgba(139, 141, 161, 0.6);
+				-webkit-box-shadow: inset 0px 0px 24px 0px rgba(58, 58, 58, 0.31);
+				-moz-box-shadow: inset 0px 0px 24px 0px rgba(58, 58, 58, 0.31);
+				box-shadow: inset 0px 0px 24px 0px rgba(58, 58, 58, 0.31);
+			}
+			&-1::before {
 				content: '1';
+				color: #000;
+			}
+			&-2::before {
+				content: '2';
+				color: green;
+			}
+			&-3::before {
+				content: '3';
+				color: red;
+			}
+			&-4::before {
+				content: '4';
+				color: blue;
+			}
+			&-5::before {
+				content: '5';
+				color: tomato;
+			}
+			&-6::before {
+				content: '6';
+				color: tomato;
+			}
+			&-7::before {
+				content: '7';
+				color: tomato;
+			}
+			&-8::before {
+				content: '8';
+				color: tomato;
 			}
 		}
 	}
