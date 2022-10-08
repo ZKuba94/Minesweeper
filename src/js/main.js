@@ -11,6 +11,7 @@ const intermediate = [16, 16, 40];
 const expert = [31, 16, 99];
 
 let bombsNumber = 0;
+let flagsNumber = 0;
 let bombs = [];
 let boxes = [];
 let chosenLevel = begginer;
@@ -72,8 +73,8 @@ const clearPlate = () => {
 };
 
 const newGame = () => {
-	clearPlate();
 	counterMines.innerHTML = `0${chosenLevel[2]}`;
+	clearPlate();
 	shuffle(countBoxes(chosenLevel), chosenLevel[2]);
 	createGamePlate(countBoxes(chosenLevel));
 	plantBombs();
@@ -111,12 +112,20 @@ const unfoldMenu = e => {
 
 const putFlag = e => {
 	e.preventDefault();
-	e.target.classList.toggle('put-flag');
+	if (
+		!e.target.classList.contains('show-empty') &&
+		!e.target.classList.contains('show-bomb') &&
+		!e.target.classList.contains('show-trigger') &&
+		!e.target.classList.contains('show-number') &&
+		!e.target.classList.contains('wrong-bet')
+	) {
+		e.target.classList.toggle('put-flag');
+	}
 };
 
-const showAll = () => {
+const showAll = e => {
 	const plateElements = gamePlate.getElementsByClassName('game-box__plate__element');
-
+	e.preventDefault();
 	for (const box of boxes) {
 		if (box.bomb === true) {
 			if (!plateElements[box.id].classList.contains('put-flag')) {
@@ -131,10 +140,17 @@ const showAll = () => {
 	}
 };
 
-const checkBombAround = (i, rowLength) => {
-	// let id = Number.parseFloat(e.target.id);
-	// const plateElements = gamePlate.getElementsByClassName('game-box__plate__element');
+// const endGame = e => {
+// 	// should be impossible to click anything on game plate
+// 	// clock stop
+// 	// if win, change face
+// 	// if lose, change face
+// 	if (e.target.classList.contains('show-trigger')) {
+// 		e.preventDefault();
+// 	}
+// };
 
+const checkBombAround = (i, rowLength) => {
 	if (i === 0) {
 		// top-left corner check
 		if (bombs.includes(i + 1)) {
@@ -288,7 +304,6 @@ const checkBombAround = (i, rowLength) => {
 };
 
 const showEmptyForZeroBombs = (i, rowLength) => {
-	console.log(i);
 	if (i === 0) {
 		if (!plateElements[i + 1].classList.contains('show-empty')) {
 			showEmpty(i + 1, rowLength);
@@ -422,39 +437,39 @@ const showEmptyForZeroBombs = (i, rowLength) => {
 };
 
 const showEmpty = (e, rowLength) => {
-	// e.target.classList.add('show-empty');
-	// checkBombAround(e, chosenLevel[0]);
 	let i = Number.parseFloat(e);
-	if (boxes[i].bombsAround === 0) {
-		plateElements[i].classList.add('show-empty');
-		// checkBombAround(e, chosenLevel[0]);
-		showEmptyForZeroBombs(i, rowLength);
-	} else if (boxes[i].bombsAround === 1) {
-		plateElements[i].classList.add('show-number');
-		plateElements[i].classList.add('show-number-1');
-	} else if (boxes[i].bombsAround === 2) {
-		plateElements[i].classList.add('show-number');
-		plateElements[i].classList.add('show-number-2');
-	} else if (boxes[i].bombsAround === 3) {
-		plateElements[i].classList.add('show-number');
-		plateElements[i].classList.add('show-number-3');
-	} else if (boxes[i].bombsAround === 4) {
-		plateElements[i].classList.add('show-number');
-		plateElements[i].classList.add('show-number-4');
-	} else if (boxes[i].bombsAround === 5) {
-		plateElements[i].classList.add('show-number');
-		plateElements[i].classList.add('show-number-5');
-	} else if (boxes[i].bombsAround === 6) {
-		plateElements[i].classList.add('show-number');
-		plateElements[i].classList.add('show-number-6');
-	} else if (boxes[i].bombsAround === 7) {
-		plateElements[i].classList.add('show-number');
-		plateElements[i].classList.add('show-number-7');
-	} else if (boxes[i].bombsAround === 8) {
-		plateElements[i].classList.add('show-number');
-		plateElements[i].classList.add('show-number-8');
+	if (!plateElements[i].classList.contains('put-flag')) {
+		if (boxes[i].bombsAround === 0) {
+			plateElements[i].classList.add('show-empty');
+			// checkBombAround(e, chosenLevel[0]);
+			showEmptyForZeroBombs(i, rowLength);
+		} else if (boxes[i].bombsAround === 1) {
+			plateElements[i].classList.add('show-number');
+			plateElements[i].classList.add('show-number-1');
+		} else if (boxes[i].bombsAround === 2) {
+			plateElements[i].classList.add('show-number');
+			plateElements[i].classList.add('show-number-2');
+		} else if (boxes[i].bombsAround === 3) {
+			plateElements[i].classList.add('show-number');
+			plateElements[i].classList.add('show-number-3');
+		} else if (boxes[i].bombsAround === 4) {
+			plateElements[i].classList.add('show-number');
+			plateElements[i].classList.add('show-number-4');
+		} else if (boxes[i].bombsAround === 5) {
+			plateElements[i].classList.add('show-number');
+			plateElements[i].classList.add('show-number-5');
+		} else if (boxes[i].bombsAround === 6) {
+			plateElements[i].classList.add('show-number');
+			plateElements[i].classList.add('show-number-6');
+		} else if (boxes[i].bombsAround === 7) {
+			plateElements[i].classList.add('show-number');
+			plateElements[i].classList.add('show-number-7');
+		} else if (boxes[i].bombsAround === 8) {
+			plateElements[i].classList.add('show-number');
+			plateElements[i].classList.add('show-number-8');
+		}
+		return;
 	}
-	return;
 };
 
 const leftClick = e => {
@@ -464,7 +479,167 @@ const leftClick = e => {
 		showEmpty(e.target.id, chosenLevel[0]);
 	} else if (boxes[e.target.id].bomb === true) {
 		e.target.classList.add('show-trigger');
-		showAll();
+		showAll(e);
+		// endGame();
+	}
+};
+
+const checkFlagsAround = (i, rowLength) => {
+	if (i === 0) {
+		if (document.getElementById(i + 1).classList.contains('put-flag')) {
+			flagsNumber++;
+		}
+		if (document.getElementById(i + rowLength).classList.contains('put-flag')) {
+			flagsNumber++;
+		}
+		if (document.getElementById(i + rowLength + 1).classList.contains('put-flag')) {
+			flagsNumber++;
+		}
+	} else if (i === rowLength - 1) {
+		if (document.getElementById(i - 1).classList.contains('put-flag')) {
+			flagsNumber++;
+		}
+		if (document.getElementById(i + rowLength).classList.contains('put-flag')) {
+			flagsNumber++;
+		}
+		if (document.getElementById(i + rowLength - 1).classList.contains('put-flag')) {
+			flagsNumber++;
+		}
+	} else if (i === rowLength * rowLength - rowLength) {
+		if (document.getElementById(i + 1).classList.contains('put-flag')) {
+			flagsNumber++;
+		}
+		if (document.getElementById(i - rowLength).classList.contains('put-flag')) {
+			flagsNumber++;
+		}
+		if (document.getElementById(i - rowLength - 1).classList.contains('put-flag')) {
+			flagsNumber++;
+		}
+	} else if (i === rowLength * rowLength - 1) {
+		if (document.getElementById(i - 1).classList.contains('put-flag')) {
+			flagsNumber++;
+		}
+		if (document.getElementById(i - rowLength).classList.contains('put-flag')) {
+			flagsNumber++;
+		}
+		if (document.getElementById(i - rowLength + 1).classList.contains('put-flag')) {
+			flagsNumber++;
+		}
+	} else if (i % rowLength === 0) {
+		if (document.getElementById(i - rowLength).classList.contains('put-flag')) {
+			flagsNumber++;
+		}
+		if (document.getElementById(i - rowLength + 1).classList.contains('put-flag')) {
+			flagsNumber++;
+		}
+		if (document.getElementById(i + 1).classList.contains('put-flag')) {
+			flagsNumber++;
+		}
+		if (document.getElementById(i + rowLength).classList.contains('put-flag')) {
+			flagsNumber++;
+		}
+		if (document.getElementById(i + rowLength + 1).classList.contains('put-flag')) {
+			flagsNumber++;
+		}
+	} else if ((i + 1) % rowLength === 0) {
+		if (document.getElementById(i - rowLength).classList.contains('put-flag')) {
+			flagsNumber++;
+		}
+		if (document.getElementById(i - rowLength - 1).classList.contains('put-flag')) {
+			flagsNumber++;
+		}
+		if (document.getElementById(i - 1).classList.contains('put-flag')) {
+			flagsNumber++;
+		}
+		if (document.getElementById(i + rowLength).classList.contains('put-flag')) {
+			flagsNumber++;
+		}
+		if (document.getElementById(i + rowLength - 1).classList.contains('put-flag')) {
+			flagsNumber++;
+		}
+	} else if (i - rowLength < 0) {
+		if (document.getElementById(i - 1).classList.contains('put-flag')) {
+			flagsNumber++;
+		}
+		if (document.getElementById(i + 1).classList.contains('put-flag')) {
+			flagsNumber++;
+		}
+		if (document.getElementById(i + rowLength + 1).classList.contains('put-flag')) {
+			flagsNumber++;
+		}
+		if (document.getElementById(i + rowLength).classList.contains('put-flag')) {
+			flagsNumber++;
+		}
+		if (document.getElementById(i + rowLength - 1).classList.contains('put-flag')) {
+			flagsNumber++;
+		}
+	} else if (i > rowLength * rowLength - rowLength) {
+		if (document.getElementById(i - 1).classList.contains('put-flag')) {
+			flagsNumber++;
+		}
+		if (document.getElementById(i + 1).classList.contains('put-flag')) {
+			flagsNumber++;
+		}
+		if (document.getElementById(i - rowLength + 1).classList.contains('put-flag')) {
+			flagsNumber++;
+		}
+		if (document.getElementById(i - rowLength).classList.contains('put-flag')) {
+			flagsNumber++;
+		}
+		if (document.getElementById(i - rowLength - 1).classList.contains('put-flag')) {
+			flagsNumber++;
+		}
+	} else {
+		if (document.getElementById(i - 1).classList.contains('put-flag')) {
+			flagsNumber++;
+		}
+		if (document.getElementById(i + 1).classList.contains('put-flag')) {
+			flagsNumber++;
+		}
+		if (document.getElementById(i - rowLength + 1).classList.contains('put-flag')) {
+			flagsNumber++;
+		}
+		if (document.getElementById(i - rowLength).classList.contains('put-flag')) {
+			flagsNumber++;
+		}
+		if (document.getElementById(i - rowLength - 1).classList.contains('put-flag')) {
+			flagsNumber++;
+		}
+		if (document.getElementById(i + rowLength + 1).classList.contains('put-flag')) {
+			flagsNumber++;
+		}
+		if (document.getElementById(i + rowLength).classList.contains('put-flag')) {
+			flagsNumber++;
+		}
+		if (document.getElementById(i + rowLength - 1).classList.contains('put-flag')) {
+			flagsNumber++;
+		}
+	}
+};
+
+const doubleClick = e => {
+	let k = Number.parseFloat(e.target.id);
+	if (e.target.classList.contains('show-number')) {
+		flagsNumber = 0;
+		checkFlagsAround(Number.parseFloat(e.target.id), chosenLevel[0]);
+		if (e.target.classList.contains('show-number-1') && flagsNumber === 1) {
+			showEmptyForZeroBombs(k, chosenLevel[0]);
+		} else if (e.target.classList.contains('show-number-2') && flagsNumber === 2) {
+			showEmptyForZeroBombs(k, chosenLevel[0]);
+		} else if (e.target.classList.contains('show-number-3') && flagsNumber === 3) {
+			showEmptyForZeroBombs(k, chosenLevel[0]);
+		} else if (e.target.classList.contains('show-number-4') && flagsNumber === 4) {
+			showEmptyForZeroBombs(k, chosenLevel[0]);
+		} else if (e.target.classList.contains('show-number-5') && flagsNumber === 5) {
+			showEmptyForZeroBombs(k, chosenLevel[0]);
+		} else if (e.target.classList.contains('show-number-6') && flagsNumber === 6) {
+			showEmptyForZeroBombs(k, chosenLevel[0]);
+		} else if (e.target.classList.contains('show-number-7') && flagsNumber === 7) {
+			showEmptyForZeroBombs(k, chosenLevel[0]);
+		} else if (e.target.classList.contains('show-number-8') && flagsNumber === 8) {
+			showEmptyForZeroBombs(k, chosenLevel[0]);
+		}
+		flagsNumber = 0;
 	}
 };
 
@@ -473,5 +648,5 @@ navBar.addEventListener('click', unfoldMenu);
 navItems.forEach(item => item.addEventListener('click', chooseLevel));
 gamePlate.addEventListener('contextmenu', putFlag);
 gamePlate.addEventListener('click', leftClick);
-
+gamePlate.addEventListener('dblclick', doubleClick);
 newGame();

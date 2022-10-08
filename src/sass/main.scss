@@ -184,6 +184,20 @@ body {
 			-moz-box-shadow: 0px 0px 24px 0px rgba(66, 68, 90, 1);
 			box-shadow: 0px 0px 24px 0px rgba(66, 68, 90, 1);
 		}
+		.put-flag {
+			&::before {
+				content: '🚩';
+			}
+		}
+		.wrong-bet {
+			background-color: rgba(139, 141, 161, 0.6);
+			-webkit-box-shadow: inset 0px 0px 24px 0px rgba(58, 58, 58, 0.31);
+			-moz-box-shadow: inset 0px 0px 24px 0px rgba(58, 58, 58, 0.31);
+			box-shadow: inset 0px 0px 24px 0px rgba(58, 58, 58, 0.31);
+			&::before {
+				content: '❗️';
+			}
+		}
 		.show-empty {
 			background-color: rgba(139, 141, 161, 0.6);
 			-webkit-box-shadow: inset 0px 0px 24px 0px rgba(58, 58, 58, 0.31);
@@ -209,20 +223,6 @@ body {
 			box-shadow: inset 0px 0px 24px 0px rgba(58, 58, 58, 0.31);
 			&::before {
 				content: '💥';
-			}
-		}
-		.put-flag {
-			&::before {
-				content: '🚩';
-			}
-		}
-		.wrong-bet {
-			background-color: rgba(139, 141, 161, 0.6);
-			-webkit-box-shadow: inset 0px 0px 24px 0px rgba(58, 58, 58, 0.31);
-			-moz-box-shadow: inset 0px 0px 24px 0px rgba(58, 58, 58, 0.31);
-			box-shadow: inset 0px 0px 24px 0px rgba(58, 58, 58, 0.31);
-			&::before {
-				content: '❗️';
 			}
 		}
 		.show-number {
