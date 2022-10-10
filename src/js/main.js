@@ -3,6 +3,7 @@ const navBar = document.querySelector('.navbar');
 const gameList = document.querySelector('.navbar__list-game');
 const navItems = gameList.querySelectorAll('.navbar__list__item');
 const counterMines = document.querySelector('.counter-mines');
+const statusFace = document.querySelector('.game-box__bar__status-face');
 
 const plateElements = gamePlate.getElementsByClassName('game-box__plate__element');
 
@@ -12,11 +13,13 @@ const expert = [31, 16, 99];
 
 let bombsNumber = 0;
 let flagsNumber = 0;
+let flagsCounter = 0;
 let bombs = [];
 let boxes = [];
+let bombsIndexes = [];
 let chosenLevel = begginer;
 
-const countBoxes = chosenLevel => {
+const countFields = chosenLevel => {
 	return chosenLevel[0] * chosenLevel[1];
 };
 
@@ -32,18 +35,203 @@ const shuffle = (boxesAmount, bombsAmount) => {
 };
 
 class GamePlate {
-	constructor(id, bomb, bombsAround) {
+	constructor(id, bomb, bombsAround, bombsIndexes) {
 		this.id = id;
 		this.bomb = bomb;
 		this.bombsAround = bombsAround;
+		this.bombsIndexes = bombsIndexes;
 	}
 }
 
 const createGamePlate = boxesAmount => {
 	for (let i = 0; i < boxesAmount; i++) {
-		checkBombAround(i, chosenLevel[0]);
-		boxes[i] = new GamePlate(i, false, bombsNumber);
+		boxes[i] = new GamePlate(i, false, bombsNumber, bombsIndexes);
+		boxes[i].bombsIndexes = [];
+		checkBombsAround(i, chosenLevel[0]);
+		boxes[i].bombsAround = bombsNumber;
 		bombsNumber = 0;
+	}
+};
+
+const checkBombsAround = (i, rowLength) => {
+	if (i === 0) {
+		// top-left corner check
+		if (bombs.includes(i + 1)) {
+			bombsNumber++;
+			boxes[i].bombsIndexes.push(i + 1);
+		}
+		if (bombs.includes(i + rowLength)) {
+			bombsNumber++;
+			boxes[i].bombsIndexes.push(i + rowLength);
+		}
+		if (bombs.includes(i + (rowLength + 1))) {
+			bombsNumber++;
+			boxes[i].bombsIndexes.push(i + 1 + rowLength);
+		}
+	} else if (i === rowLength - 1) {
+		// top-right corner check
+		if (bombs.includes(i - 1)) {
+			bombsNumber++;
+			boxes[i].bombsIndexes.push(i - 1);
+		}
+		if (bombs.includes(i + rowLength)) {
+			bombsNumber++;
+			boxes[i].bombsIndexes.push(i + rowLength);
+		}
+		if (bombs.includes(i + (rowLength - 1))) {
+			bombsNumber++;
+			boxes[i].bombsIndexes.push(i + (rowLength - 1));
+		}
+	} else if (i === rowLength * rowLength - rowLength) {
+		// bottom-left corner check
+		if (bombs.includes(i + 1)) {
+			bombsNumber++;
+			boxes[i].bombsIndexes.push(i + 1);
+		}
+		if (bombs.includes(i - rowLength)) {
+			bombsNumber++;
+			boxes[i].bombsIndexes.push(i - rowLength);
+		}
+		if (bombs.includes(i - (rowLength - 1))) {
+			bombsNumber++;
+			boxes[i].bombsIndexes.push(i - (rowLength - 1));
+		}
+	} else if (i === rowLength * rowLength - 1) {
+		// bottom-right corner check
+		if (bombs.includes(i - 1)) {
+			bombsNumber++;
+			boxes[i].bombsIndexes.push(i - 1);
+		}
+		if (bombs.includes(i - rowLength)) {
+			bombsNumber++;
+			boxes[i].bombsIndexes.push(i - rowLength);
+		}
+		if (bombs.includes(i - (rowLength + 1))) {
+			bombsNumber++;
+			boxes[i].bombsIndexes.push(i - (rowLength + 1));
+		}
+	} else if (i % rowLength === 0) {
+		// side left check
+		if (bombs.includes(i - rowLength)) {
+			bombsNumber++;
+			boxes[i].bombsIndexes.push(i - rowLength);
+		}
+		if (bombs.includes(i - rowLength + 1)) {
+			bombsNumber++;
+			boxes[i].bombsIndexes.push(i - rowLength + 1);
+		}
+		if (bombs.includes(i + 1)) {
+			bombsNumber++;
+			boxes[i].bombsIndexes.push(i + 1);
+		}
+		if (bombs.includes(i + rowLength)) {
+			bombsNumber++;
+			boxes[i].bombsIndexes.push(i + rowLength);
+		}
+		if (bombs.includes(i + rowLength + 1)) {
+			bombsNumber++;
+			boxes[i].bombsIndexes.push(i + rowLength + 1);
+		}
+	} else if ((i + 1) % rowLength === 0) {
+		// side right check
+		if (bombs.includes(i - rowLength)) {
+			bombsNumber++;
+			boxes[i].bombsIndexes.push(i - rowLength);
+		}
+		if (bombs.includes(i - rowLength - 1)) {
+			bombsNumber++;
+			boxes[i].bombsIndexes.push(i - rowLength - 1);
+		}
+		if (bombs.includes(i - 1)) {
+			bombsNumber++;
+			boxes[i].bombsIndexes.push(i - 1);
+		}
+		if (bombs.includes(i + rowLength)) {
+			bombsNumber++;
+			boxes[i].bombsIndexes.push(i + rowLength);
+		}
+		if (bombs.includes(i + rowLength - 1)) {
+			bombsNumber++;
+			boxes[i].bombsIndexes.push(i + rowLength - 1);
+		}
+	} else if (i - rowLength < 0) {
+		// side top check
+		if (bombs.includes(i - 1)) {
+			bombsNumber++;
+			boxes[i].bombsIndexes.push(i - 1);
+		}
+		if (bombs.includes(i + 1)) {
+			bombsNumber++;
+			boxes[i].bombsIndexes.push(i + 1);
+		}
+		if (bombs.includes(i + rowLength + 1)) {
+			bombsNumber++;
+			boxes[i].bombsIndexes.push(i + rowLength + 1);
+		}
+		if (bombs.includes(i + rowLength)) {
+			bombsNumber++;
+			boxes[i].bombsIndexes.push(i + rowLength);
+		}
+		if (bombs.includes(i + rowLength - 1)) {
+			bombsNumber++;
+			boxes[i].bombsIndexes.push(i + rowLength - 1);
+		}
+	} else if (i > rowLength * rowLength - rowLength) {
+		// side bottom check
+		if (bombs.includes(i - 1)) {
+			bombsNumber++;
+			boxes[i].bombsIndexes.push(i - 1);
+		}
+		if (bombs.includes(i + 1)) {
+			bombsNumber++;
+			boxes[i].bombsIndexes.push(i + 1);
+		}
+		if (bombs.includes(i - rowLength + 1)) {
+			bombsNumber++;
+			boxes[i].bombsIndexes.push(i - rowLength + 1);
+		}
+		if (bombs.includes(i - rowLength)) {
+			bombsNumber++;
+			boxes[i].bombsIndexes.push(i - rowLength);
+		}
+		if (bombs.includes(i - rowLength - 1)) {
+			bombsNumber++;
+			boxes[i].bombsIndexes.push(i - rowLength - 1);
+		}
+	} else {
+		// the rest of boxes
+		if (bombs.includes(i - 1)) {
+			bombsNumber++;
+			boxes[i].bombsIndexes.push(i - 1);
+		}
+		if (bombs.includes(i + 1)) {
+			bombsNumber++;
+			boxes[i].bombsIndexes.push(i + 1);
+		}
+		if (bombs.includes(i - rowLength + 1)) {
+			bombsNumber++;
+			boxes[i].bombsIndexes.push(i - rowLength + 1);
+		}
+		if (bombs.includes(i - rowLength)) {
+			bombsNumber++;
+			boxes[i].bombsIndexes.push(i - rowLength);
+		}
+		if (bombs.includes(i - rowLength - 1)) {
+			bombsNumber++;
+			boxes[i].bombsIndexes.push(i - rowLength - 1);
+		}
+		if (bombs.includes(i + rowLength + 1)) {
+			bombsNumber++;
+			boxes[i].bombsIndexes.push(i + rowLength + 1);
+		}
+		if (bombs.includes(i + rowLength)) {
+			bombsNumber++;
+			boxes[i].bombsIndexes.push(i + rowLength);
+		}
+		if (bombs.includes(i + rowLength - 1)) {
+			bombsNumber++;
+			boxes[i].bombsIndexes.push(i + rowLength - 1);
+		}
 	}
 };
 
@@ -70,15 +258,6 @@ const clearPlate = () => {
 	gamePlate.innerHTML = '';
 	bombs = [];
 	boxes = [];
-};
-
-const newGame = () => {
-	counterMines.innerHTML = `0${chosenLevel[2]}`;
-	clearPlate();
-	shuffle(countBoxes(chosenLevel), chosenLevel[2]);
-	createGamePlate(countBoxes(chosenLevel));
-	plantBombs();
-	drawGamePlate(countBoxes(chosenLevel));
 };
 
 const chooseLevel = e => {
@@ -110,6 +289,14 @@ const unfoldMenu = e => {
 	}
 };
 
+const countMines = e => {
+	if (chosenLevel[2] - flagsCounter < 10) {
+		counterMines.innerHTML = `00${chosenLevel[2] - flagsCounter}`;
+	} else if (chosenLevel[2] - flagsCounter < 100) {
+		counterMines.innerHTML = `0${chosenLevel[2] - flagsCounter}`;
+	}
+};
+
 const putFlag = e => {
 	e.preventDefault();
 	if (
@@ -117,15 +304,32 @@ const putFlag = e => {
 		!e.target.classList.contains('show-bomb') &&
 		!e.target.classList.contains('show-trigger') &&
 		!e.target.classList.contains('show-number') &&
-		!e.target.classList.contains('wrong-bet')
+		!e.target.classList.contains('wrong-bet') &&
+		e.target.classList.contains('game-box__plate__element')
 	) {
 		e.target.classList.toggle('put-flag');
+		if (e.target.classList.contains('put-flag')) {
+			flagsCounter++;
+		} else if (
+			!e.target.classList.contains('put-flag') &&
+			e.target.classList.contains('game-box__plate__element')
+		) {
+			flagsCounter--;
+		}
 	}
 };
 
-const showAll = e => {
-	const plateElements = gamePlate.getElementsByClassName('game-box__plate__element');
-	e.preventDefault();
+const newGame = () => {
+	flagsCounter = 0;
+	countMines();
+	clearPlate();
+	shuffle(countFields(chosenLevel), chosenLevel[2]);
+	createGamePlate(countFields(chosenLevel));
+	plantBombs();
+	drawGamePlate(countFields(chosenLevel));
+};
+
+const showAllFields = () => {
 	for (const box of boxes) {
 		if (box.bomb === true) {
 			if (!plateElements[box.id].classList.contains('put-flag')) {
@@ -150,167 +354,16 @@ const showAll = e => {
 // 	}
 // };
 
-const checkBombAround = (i, rowLength) => {
-	if (i === 0) {
-		// top-left corner check
-		if (bombs.includes(i + 1)) {
-			bombsNumber++;
-		}
-		if (bombs.includes(i + rowLength)) {
-			bombsNumber++;
-		}
-		if (bombs.includes(i + (rowLength + 1))) {
-			bombsNumber++;
-		}
-	} else if (i === rowLength - 1) {
-		// top-right corner check
-		if (bombs.includes(i - 1)) {
-			bombsNumber++;
-		}
-		if (bombs.includes(i + rowLength)) {
-			bombsNumber++;
-		}
-		if (bombs.includes(i + (rowLength - 1))) {
-			bombsNumber++;
-		}
-	} else if (i === rowLength * rowLength - rowLength) {
-		// bottom-left corner check
-		if (bombs.includes(i + 1)) {
-			bombsNumber++;
-		}
-		if (bombs.includes(i - rowLength)) {
-			bombsNumber++;
-		}
-		if (bombs.includes(i - (rowLength - 1))) {
-			bombsNumber++;
-		}
-	} else if (i === rowLength * rowLength - 1) {
-		// bottom-right corner check
-		if (bombs.includes(i - 1)) {
-			bombsNumber++;
-		}
-		if (bombs.includes(i - rowLength)) {
-			bombsNumber++;
-		}
-		if (bombs.includes(i - (rowLength + 1))) {
-			bombsNumber++;
-		}
-	} else if (i % rowLength === 0) {
-		// side left check
-		if (bombs.includes(i - rowLength)) {
-			bombsNumber++;
-		}
-		if (bombs.includes(i - rowLength + 1)) {
-			bombsNumber++;
-		}
-		if (bombs.includes(i + 1)) {
-			bombsNumber++;
-		}
-		if (bombs.includes(i + rowLength)) {
-			bombsNumber++;
-		}
-		if (bombs.includes(i + rowLength + 1)) {
-			bombsNumber++;
-		}
-	} else if ((i + 1) % rowLength === 0) {
-		// side right check
-		if (bombs.includes(i - rowLength)) {
-			bombsNumber++;
-		}
-		if (bombs.includes(i - rowLength - 1)) {
-			bombsNumber++;
-		}
-		if (bombs.includes(i - 1)) {
-			bombsNumber++;
-		}
-		if (bombs.includes(i + rowLength)) {
-			bombsNumber++;
-		}
-		if (bombs.includes(i + rowLength - 1)) {
-			bombsNumber++;
-		}
-	} else if (i - rowLength < 0) {
-		// side top check
-		if (bombs.includes(i - 1)) {
-			bombsNumber++;
-		}
-		if (bombs.includes(i + 1)) {
-			bombsNumber++;
-		}
-		if (bombs.includes(i + rowLength + 1)) {
-			bombsNumber++;
-		}
-		if (bombs.includes(i + rowLength)) {
-			bombsNumber++;
-		}
-		if (bombs.includes(i + rowLength - 1)) {
-			bombsNumber++;
-		}
-	} else if (i > rowLength * rowLength - rowLength) {
-		// side bottom check
-		if (bombs.includes(i - 1)) {
-			bombsNumber++;
-		}
-		if (bombs.includes(i + 1)) {
-			bombsNumber++;
-		}
-		if (bombs.includes(i - rowLength + 1)) {
-			bombsNumber++;
-		}
-		if (bombs.includes(i - rowLength)) {
-			bombsNumber++;
-		}
-		if (bombs.includes(i - rowLength - 1)) {
-			bombsNumber++;
-		}
-	} else {
-		// the rest of boxes
-		if (bombs.includes(i - 1)) {
-			bombsNumber++;
-		}
-		if (bombs.includes(i + 1)) {
-			bombsNumber++;
-		}
-		if (bombs.includes(i - rowLength + 1)) {
-			bombsNumber++;
-		}
-		if (bombs.includes(i - rowLength)) {
-			bombsNumber++;
-		}
-		if (bombs.includes(i - rowLength - 1)) {
-			bombsNumber++;
-		}
-		if (bombs.includes(i + rowLength + 1)) {
-			bombsNumber++;
-		}
-		if (bombs.includes(i + rowLength)) {
-			bombsNumber++;
-		}
-		if (bombs.includes(i + rowLength - 1)) {
-			bombsNumber++;
-		}
-		// if (bombsNumber === 0) {
-		// 	plateElements[id].classList.add(`show-number`);
-		// 	plateElements[id - 1].classList.add(`show-number`);
-		// 	plateElements[id + 1].classList.add(`show-number`);
-		// 	plateElements[id - rowLength + 1].classList.add(`show-number`);
-		// 	plateElements[id - rowLength].classList.add(`show-number`);
-		// 	plateElements[id - rowLength - 1].classList.add(`show-number`);
-		// 	plateElements[id + rowLength + 1].classList.add(`show-number`);
-		// 	plateElements[id + rowLength].classList.add(`show-number`);
-		// 	plateElements[id + rowLength - 1].classList.add(`show-number`);
-		// }
-	}
-};
-
 const showEmptyForZeroBombs = (i, rowLength) => {
 	if (i === 0) {
 		if (!plateElements[i + 1].classList.contains('show-empty')) {
 			showEmpty(i + 1, rowLength);
 		}
+
 		if (!plateElements[i + 1 + rowLength].classList.contains('show-empty')) {
 			showEmpty(i + 1 + rowLength, rowLength);
 		}
+
 		if (!plateElements[i + rowLength].classList.contains('show-empty')) {
 			showEmpty(i + rowLength, rowLength);
 		}
@@ -441,7 +494,6 @@ const showEmpty = (e, rowLength) => {
 	if (!plateElements[i].classList.contains('put-flag')) {
 		if (boxes[i].bombsAround === 0) {
 			plateElements[i].classList.add('show-empty');
-			// checkBombAround(e, chosenLevel[0]);
 			showEmptyForZeroBombs(i, rowLength);
 		} else if (boxes[i].bombsAround === 1) {
 			plateElements[i].classList.add('show-number');
@@ -468,177 +520,195 @@ const showEmpty = (e, rowLength) => {
 			plateElements[i].classList.add('show-number');
 			plateElements[i].classList.add('show-number-8');
 		}
-		return;
 	}
 };
 
-const leftClick = e => {
+const leftClickCheckField = e => {
 	if (e.target.classList.contains('put-flag')) {
 		e.preventDefault();
 	} else if (boxes[e.target.id].bomb === false) {
 		showEmpty(e.target.id, chosenLevel[0]);
 	} else if (boxes[e.target.id].bomb === true) {
 		e.target.classList.add('show-trigger');
-		showAll(e);
+		showAllFields();
 		// endGame();
 	}
 };
 
 const checkFlagsAround = (i, rowLength) => {
 	if (i === 0) {
-		if (document.getElementById(i + 1).classList.contains('put-flag')) {
+		if (plateElements[i + 1].classList.contains('put-flag')) {
 			flagsNumber++;
 		}
-		if (document.getElementById(i + rowLength).classList.contains('put-flag')) {
+		if (plateElements[i + rowLength].classList.contains('put-flag')) {
 			flagsNumber++;
 		}
-		if (document.getElementById(i + rowLength + 1).classList.contains('put-flag')) {
+		if (plateElements[i + rowLength + 1].classList.contains('put-flag')) {
 			flagsNumber++;
 		}
 	} else if (i === rowLength - 1) {
-		if (document.getElementById(i - 1).classList.contains('put-flag')) {
+		if (plateElements[i - 1].classList.contains('put-flag')) {
 			flagsNumber++;
 		}
-		if (document.getElementById(i + rowLength).classList.contains('put-flag')) {
+		if (plateElements[i + rowLength].classList.contains('put-flag')) {
 			flagsNumber++;
 		}
-		if (document.getElementById(i + rowLength - 1).classList.contains('put-flag')) {
+		if (plateElements[i + rowLength - 1].classList.contains('put-flag')) {
 			flagsNumber++;
 		}
 	} else if (i === rowLength * rowLength - rowLength) {
-		if (document.getElementById(i + 1).classList.contains('put-flag')) {
+		if (plateElements[i + 1].classList.contains('put-flag')) {
 			flagsNumber++;
 		}
-		if (document.getElementById(i - rowLength).classList.contains('put-flag')) {
+		if (plateElements[i - rowLength].classList.contains('put-flag')) {
 			flagsNumber++;
 		}
-		if (document.getElementById(i - rowLength - 1).classList.contains('put-flag')) {
+		if (plateElements[i - rowLength - 1].classList.contains('put-flag')) {
 			flagsNumber++;
 		}
 	} else if (i === rowLength * rowLength - 1) {
-		if (document.getElementById(i - 1).classList.contains('put-flag')) {
+		if (plateElements[i - 1].classList.contains('put-flag')) {
 			flagsNumber++;
 		}
-		if (document.getElementById(i - rowLength).classList.contains('put-flag')) {
+		if (plateElements[i - rowLength].classList.contains('put-flag')) {
 			flagsNumber++;
 		}
-		if (document.getElementById(i - rowLength + 1).classList.contains('put-flag')) {
+		if (plateElements[i - rowLength + 1].classList.contains('put-flag')) {
 			flagsNumber++;
 		}
 	} else if (i % rowLength === 0) {
-		if (document.getElementById(i - rowLength).classList.contains('put-flag')) {
+		if (plateElements[i - rowLength].classList.contains('put-flag')) {
 			flagsNumber++;
 		}
-		if (document.getElementById(i - rowLength + 1).classList.contains('put-flag')) {
+		if (plateElements[i - rowLength + 1].classList.contains('put-flag')) {
 			flagsNumber++;
 		}
-		if (document.getElementById(i + 1).classList.contains('put-flag')) {
+		if (plateElements[i + 1].classList.contains('put-flag')) {
 			flagsNumber++;
 		}
-		if (document.getElementById(i + rowLength).classList.contains('put-flag')) {
+		if (plateElements[i + rowLength].classList.contains('put-flag')) {
 			flagsNumber++;
 		}
-		if (document.getElementById(i + rowLength + 1).classList.contains('put-flag')) {
+		if (plateElements[i + rowLength + 1].classList.contains('put-flag')) {
 			flagsNumber++;
 		}
 	} else if ((i + 1) % rowLength === 0) {
-		if (document.getElementById(i - rowLength).classList.contains('put-flag')) {
+		if (plateElements[i - rowLength].classList.contains('put-flag')) {
 			flagsNumber++;
 		}
-		if (document.getElementById(i - rowLength - 1).classList.contains('put-flag')) {
+		if (plateElements[i - rowLength - 1].classList.contains('put-flag')) {
 			flagsNumber++;
 		}
-		if (document.getElementById(i - 1).classList.contains('put-flag')) {
+		if (plateElements[i - 1].classList.contains('put-flag')) {
 			flagsNumber++;
 		}
-		if (document.getElementById(i + rowLength).classList.contains('put-flag')) {
+		if (plateElements[i + rowLength].classList.contains('put-flag')) {
 			flagsNumber++;
 		}
-		if (document.getElementById(i + rowLength - 1).classList.contains('put-flag')) {
+		if (plateElements[i + rowLength - 1].classList.contains('put-flag')) {
 			flagsNumber++;
 		}
 	} else if (i - rowLength < 0) {
-		if (document.getElementById(i - 1).classList.contains('put-flag')) {
+		if (plateElements[i - 1].classList.contains('put-flag')) {
 			flagsNumber++;
 		}
-		if (document.getElementById(i + 1).classList.contains('put-flag')) {
+		if (plateElements[i + 1].classList.contains('put-flag')) {
 			flagsNumber++;
 		}
-		if (document.getElementById(i + rowLength + 1).classList.contains('put-flag')) {
+		if (plateElements[i + rowLength + 1].classList.contains('put-flag')) {
 			flagsNumber++;
 		}
-		if (document.getElementById(i + rowLength).classList.contains('put-flag')) {
+		if (plateElements[i + rowLength].classList.contains('put-flag')) {
 			flagsNumber++;
 		}
-		if (document.getElementById(i + rowLength - 1).classList.contains('put-flag')) {
+		if (plateElements[i + rowLength - 1].classList.contains('put-flag')) {
 			flagsNumber++;
 		}
 	} else if (i > rowLength * rowLength - rowLength) {
-		if (document.getElementById(i - 1).classList.contains('put-flag')) {
+		if (plateElements[i - 1].classList.contains('put-flag')) {
 			flagsNumber++;
 		}
-		if (document.getElementById(i + 1).classList.contains('put-flag')) {
+		if (plateElements[i + 1].classList.contains('put-flag')) {
 			flagsNumber++;
 		}
-		if (document.getElementById(i - rowLength + 1).classList.contains('put-flag')) {
+		if (plateElements[i - rowLength + 1].classList.contains('put-flag')) {
 			flagsNumber++;
 		}
-		if (document.getElementById(i - rowLength).classList.contains('put-flag')) {
+		if (plateElements[i - rowLength].classList.contains('put-flag')) {
 			flagsNumber++;
 		}
-		if (document.getElementById(i - rowLength - 1).classList.contains('put-flag')) {
+		if (plateElements[i - rowLength - 1].classList.contains('put-flag')) {
 			flagsNumber++;
 		}
 	} else {
-		if (document.getElementById(i - 1).classList.contains('put-flag')) {
+		if (plateElements[i - 1].classList.contains('put-flag')) {
 			flagsNumber++;
 		}
-		if (document.getElementById(i + 1).classList.contains('put-flag')) {
+		if (plateElements[i + 1].classList.contains('put-flag')) {
 			flagsNumber++;
 		}
-		if (document.getElementById(i - rowLength + 1).classList.contains('put-flag')) {
+		if (plateElements[i - rowLength + 1].classList.contains('put-flag')) {
 			flagsNumber++;
 		}
-		if (document.getElementById(i - rowLength).classList.contains('put-flag')) {
+		if (plateElements[i - rowLength].classList.contains('put-flag')) {
 			flagsNumber++;
 		}
-		if (document.getElementById(i - rowLength - 1).classList.contains('put-flag')) {
+		if (plateElements[i - rowLength - 1].classList.contains('put-flag')) {
 			flagsNumber++;
 		}
-		if (document.getElementById(i + rowLength + 1).classList.contains('put-flag')) {
+		if (plateElements[i + rowLength + 1].classList.contains('put-flag')) {
 			flagsNumber++;
 		}
-		if (document.getElementById(i + rowLength).classList.contains('put-flag')) {
+		if (plateElements[i + rowLength].classList.contains('put-flag')) {
 			flagsNumber++;
 		}
-		if (document.getElementById(i + rowLength - 1).classList.contains('put-flag')) {
+		if (plateElements[i + rowLength - 1].classList.contains('put-flag')) {
 			flagsNumber++;
+		}
+	}
+};
+
+const showAfterDoubleClick = e => {
+	if (boxes[e.target.id].bombsAround === boxes[e.target.id].bombsIndexes.length) {
+		console.log('dobrze dziala');
+		console.log(...boxes[e.target.id].bombsIndexes);
+		if (bombs.includes(boxes[e.target.id].bombsIndexes)) {
+			console.log('to tez poszlo');
+			console.log(boxes[e.target.id].bombsIndexes);
 		}
 	}
 };
 
 const doubleClick = e => {
 	let k = Number.parseFloat(e.target.id);
+	e.preventDefault();
 	if (e.target.classList.contains('show-number')) {
 		flagsNumber = 0;
 		checkFlagsAround(Number.parseFloat(e.target.id), chosenLevel[0]);
+
 		if (e.target.classList.contains('show-number-1') && flagsNumber === 1) {
-			showEmptyForZeroBombs(k, chosenLevel[0]);
+			// showEmptyForZeroBombs(k, chosenLevel[0]);
+			showAfterDoubleClick(e);
 		} else if (e.target.classList.contains('show-number-2') && flagsNumber === 2) {
-			showEmptyForZeroBombs(k, chosenLevel[0]);
+			// showEmptyForZeroBombs(k, chosenLevel[0]);
+			showAfterDoubleClick(e);
 		} else if (e.target.classList.contains('show-number-3') && flagsNumber === 3) {
-			showEmptyForZeroBombs(k, chosenLevel[0]);
+			// showEmptyForZeroBombs(k, chosenLevel[0]);
+			showAfterDoubleClick(e);
 		} else if (e.target.classList.contains('show-number-4') && flagsNumber === 4) {
-			showEmptyForZeroBombs(k, chosenLevel[0]);
+			// showEmptyForZeroBombs(k, chosenLevel[0]);
 		} else if (e.target.classList.contains('show-number-5') && flagsNumber === 5) {
-			showEmptyForZeroBombs(k, chosenLevel[0]);
+			// showEmptyForZeroBombs(k, chosenLevel[0]);
 		} else if (e.target.classList.contains('show-number-6') && flagsNumber === 6) {
-			showEmptyForZeroBombs(k, chosenLevel[0]);
+			// showEmptyForZeroBombs(k, chosenLevel[0]);
 		} else if (e.target.classList.contains('show-number-7') && flagsNumber === 7) {
-			showEmptyForZeroBombs(k, chosenLevel[0]);
+			// showEmptyForZeroBombs(k, chosenLevel[0]);
 		} else if (e.target.classList.contains('show-number-8') && flagsNumber === 8) {
-			showEmptyForZeroBombs(k, chosenLevel[0]);
+			// showEmptyForZeroBombs(k, chosenLevel[0]);
 		}
+
+		// Here you have to change function : showEmptyForZeroBombs , for something else, wchich opens fields, but not sure if they are empty, user could check wrong, so trigger and show all
+
 		flagsNumber = 0;
 	}
 };
@@ -646,7 +716,10 @@ const doubleClick = e => {
 //  Listeners
 navBar.addEventListener('click', unfoldMenu);
 navItems.forEach(item => item.addEventListener('click', chooseLevel));
+document.addEventListener('contextmenu', countMines);
 gamePlate.addEventListener('contextmenu', putFlag);
-gamePlate.addEventListener('click', leftClick);
+gamePlate.addEventListener('click', leftClickCheckField);
 gamePlate.addEventListener('dblclick', doubleClick);
+gamePlate.addEventListener('contextmenu', doubleClick);
+statusFace.addEventListener('click', newGame);
 newGame();
