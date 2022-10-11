@@ -95,7 +95,7 @@ body {
 
 .game-box {
 	// Game plate, squares and bar with counters
-
+	font-family: 'Roboto Mono', monospace;
 	&__bar {
 		display: flex;
 		flex-direction: row;
@@ -105,6 +105,7 @@ body {
 		border-bottom: none;
 		padding: 1rem;
 		font-size: 3rem;
+
 		&__item {
 			border: #333 3px solid;
 			padding: 0.5rem;
