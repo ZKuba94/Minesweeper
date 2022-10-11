@@ -110,11 +110,8 @@ body {
 			border: #333 3px solid;
 			padding: 0.5rem;
 		}
-		&__item-counter-time::before {
-			content: '000';
-		}
-		// &__item-counter-mines::before {
-		// 	content: '010';
+		// &__item-counter-time::before {
+		// 	content: '000';
 		// }
 		&__status-face {
 			border: #333 1px solid;
@@ -124,11 +121,11 @@ body {
 		.status-face-ok::before {
 			content: '🙂';
 		}
-		.status-face-wow::before {
-			content: '😮';
-		}
 		.status-face-succes::before {
 			content: '😎';
+		}
+		.status-face-wow::before {
+			content: '😮';
 		}
 		.status-face-lost::before {
 			content: '😵';

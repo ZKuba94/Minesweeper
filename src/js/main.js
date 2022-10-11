@@ -3,6 +3,7 @@ const navBar = document.querySelector('.navbar');
 const gameList = document.querySelector('.navbar__list-game');
 const navItems = gameList.querySelectorAll('.navbar__list__item');
 const counterMines = document.querySelector('.counter-mines');
+const counterTime = document.querySelector('.counter-time');
 const statusFace = document.querySelector('.game-box__bar__status-face');
 const plateElements = gamePlate.getElementsByClassName('game-box__plate__element');
 
@@ -17,6 +18,9 @@ let bombsIndexes = [];
 let bombsNumber = 0;
 let flagsNumber = 0;
 let flagsCounter = 0;
+// let timeInitializer = 0;
+// let count;
+// let seconds = 0;
 
 let chosenLevel = begginer;
 
@@ -259,8 +263,15 @@ const drawGamePlate = boxesAmount => {
 
 const clearPlate = () => {
 	gamePlate.innerHTML = '';
+	counterTime.innerHTML = `000`;
+	flagsCounter = 0;
+	// timeInitializer = 0;
+	// seconds = 0;
 	bombs = [];
 	boxes = [];
+	statusFace.classList.add('status-face-ok');
+	statusFace.classList.remove('status-face-lost');
+	statusFace.classList.remove('status-face-succes');
 };
 // Navigation things, option, new game, select level...
 const chooseLevel = e => {
@@ -323,7 +334,6 @@ const putFlag = e => {
 };
 
 const newGame = () => {
-	flagsCounter = 0;
 	countMines();
 	clearPlate();
 	shuffle(countFields(chosenLevel), chosenLevel[2]);
@@ -445,7 +455,6 @@ const showEmptyForZeroBombs = (i, rowLength) => {
 		}
 	} else if (i > countFields(chosenLevel) - rowLength) {
 		// all bottom line without corners
-		console.log('lapie warunek dolnej lini');
 		if (!plateElements[i - 1].classList.contains('show-empty')) {
 			showEmpty(i - 1, rowLength);
 		}
@@ -524,14 +533,17 @@ const showEmpty = (i, rowLength) => {
 };
 
 const leftClickCheckField = e => {
-	if (e.target.classList.contains('put-flag')) {
-		e.preventDefault();
-	} else if (boxes[e.target.id].bomb === false) {
-		showEmpty(Number.parseFloat(e.target.id), chosenLevel[0]);
-	} else if (boxes[e.target.id].bomb === true) {
-		e.target.classList.add('show-trigger');
-		showAllFields();
-		// endGame();
+	if (e.button === 0) {
+		if (e.target.classList.contains('put-flag')) {
+			e.preventDefault();
+		} else if (boxes[e.target.id].bomb === false) {
+			showEmpty(Number.parseFloat(e.target.id), chosenLevel[0]);
+		} else if (boxes[e.target.id].bomb === true) {
+			e.target.classList.add('show-trigger');
+			statusFace.classList.add('status-face-lost');
+			showAllFields();
+			// endGame();
+		}
 	}
 };
 
@@ -682,6 +694,7 @@ const checkFlagAfterDoubleClick = (j, k) => {
 		showEmptyForZeroBombs(j, chosenLevel[0]);
 	} else {
 		plateElements[k].classList.add('showtrigger');
+		statusFace.classList.add('status-face-lost');
 		showAllFields();
 	}
 };
@@ -862,15 +875,53 @@ const doubleClick = e => {
 	}
 };
 
+const uncertainFace = e => {
+	if (e.button === 0) {
+		statusFace.classList.add('status-face-wow');
+	}
+};
+const neutralFace = e => {
+	if (e.button === 0) {
+		statusFace.classList.remove('status-face-wow');
+	}
+};
+
+// const clockCounter = e => {
+// 	if (
+// 		e.target.classList.contains('show-empty') ||
+// 		(e.target.classList.contains('show-number') && timeInitializer === 0)
+// 	) {
+// 		timeInitializer++;
+// 		clearInterval(count);
+// 		count = setInterval(() => {
+// 			if (seconds < 9) {
+// 				seconds++;
+// 				counterTime.innerHTML = `00${seconds}`;
+// 			} else if (seconds < 100) {
+// 				seconds++;
+// 				counterTime.innerHTML = `0${seconds}`;
+// 			} else if (seconds < 1000) {
+// 				seconds++;
+// 				counterTime.innerHTML = `${seconds}`;
+// 			}
+// 		}, 1000);
+// 	}
+// 	// try it until there will be no fields to open and the same amount flag as bombs
+// };
+
 //  Listeners
 navBar.addEventListener('click', unfoldMenu);
 navItems.forEach(item => item.addEventListener('click', chooseLevel));
 document.addEventListener('contextmenu', countMines);
 gamePlate.addEventListener('contextmenu', putFlag);
 gamePlate.addEventListener('click', leftClickCheckField);
+gamePlate.addEventListener('mouseup', leftClickCheckField);
 gamePlate.addEventListener('dblclick', doubleClick);
 gamePlate.addEventListener('contextmenu', doubleClick);
 
 statusFace.addEventListener('click', newGame);
+gamePlate.addEventListener('mousedown', uncertainFace);
+gamePlate.addEventListener('mouseup', neutralFace);
+// gamePlate.addEventListener('click', clockCounter);
 
 newGame();
