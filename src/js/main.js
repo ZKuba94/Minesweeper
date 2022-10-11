@@ -703,7 +703,7 @@ const showAfterDoubleClick = (e, rowLength) => {
 				checkFlagAfterDoubleClick(j, j + rowLength);
 			}
 
-			if (plateElements[j + (rowLength - 1)].classList.contains('put-flag')) {
+			if (plateElements[j + rowLength - 1].classList.contains('put-flag')) {
 				checkFlagAfterDoubleClick(j, j + rowLength - 1);
 			}
 		} else if (j === rowLength * rowLength - rowLength) {
@@ -767,8 +767,8 @@ const showAfterDoubleClick = (e, rowLength) => {
 			if (plateElements[j + 1].classList.contains('put-flag')) {
 				checkFlagAfterDoubleClick(j, j + 1);
 			}
-			if (plateElements[j + (rowLength - 1)].classList.contains('put-flag')) {
-				checkFlagAfterDoubleClick(j, j + (rowLength - 1));
+			if (plateElements[j + rowLength - 1].classList.contains('put-flag')) {
+				checkFlagAfterDoubleClick(j, j + rowLength - 1);
 			}
 			if (plateElements[j + rowLength].classList.contains('put-flag')) {
 				checkFlagAfterDoubleClick(j, j + rowLength);
@@ -783,8 +783,8 @@ const showAfterDoubleClick = (e, rowLength) => {
 			if (plateElements[j + 1].classList.contains('put-flag')) {
 				checkFlagAfterDoubleClick(j, j + 1);
 			}
-			if (plateElements[j - (rowLength - 1)].classList.contains('put-flag')) {
-				checkFlagAfterDoubleClick(j, j - (rowLength - 1));
+			if (plateElements[j - rowLength - 1].classList.contains('put-flag')) {
+				checkFlagAfterDoubleClick(j, j - rowLength - 1);
 			}
 			if (plateElements[j - rowLength + 1].classList.contains('put-flag')) {
 				checkFlagAfterDoubleClick(j, j - rowLength + 1);
