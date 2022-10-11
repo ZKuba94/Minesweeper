@@ -4,19 +4,20 @@ const gameList = document.querySelector('.navbar__list-game');
 const navItems = gameList.querySelectorAll('.navbar__list__item');
 const counterMines = document.querySelector('.counter-mines');
 const statusFace = document.querySelector('.game-box__bar__status-face');
-
 const plateElements = gamePlate.getElementsByClassName('game-box__plate__element');
 
 const begginer = [8, 8, 10];
 const intermediate = [16, 16, 40];
 const expert = [31, 16, 99];
 
-let bombsNumber = 0;
-let flagsNumber = 0;
-let flagsCounter = 0;
 let bombs = [];
 let boxes = [];
 let bombsIndexes = [];
+
+let bombsNumber = 0;
+let flagsNumber = 0;
+let flagsCounter = 0;
+
 let chosenLevel = begginer;
 
 const countFields = chosenLevel => {
@@ -489,8 +490,8 @@ const showEmptyForZeroBombs = (i, rowLength) => {
 	}
 };
 
-const showEmpty = (e, rowLength) => {
-	let i = Number.parseFloat(e);
+const showEmpty = (i, rowLength) => {
+	// let i = Number.parseFloat(e);
 	if (!plateElements[i].classList.contains('put-flag')) {
 		if (boxes[i].bombsAround === 0) {
 			plateElements[i].classList.add('show-empty');
@@ -527,7 +528,7 @@ const leftClickCheckField = e => {
 	if (e.target.classList.contains('put-flag')) {
 		e.preventDefault();
 	} else if (boxes[e.target.id].bomb === false) {
-		showEmpty(e.target.id, chosenLevel[0]);
+		showEmpty(Number.parseFloat(e.target.id), chosenLevel[0]);
 	} else if (boxes[e.target.id].bomb === true) {
 		e.target.classList.add('show-trigger');
 		showAllFields();
@@ -668,13 +669,154 @@ const checkFlagsAround = (i, rowLength) => {
 	}
 };
 
-const showAfterDoubleClick = e => {
+const checkFlagAfterDoubleClick = (j, k) => {
+	if (bombs.includes(k)) {
+		showEmptyForZeroBombs(j, chosenLevel[0]);
+	} else {
+		plateElements[k].classList.add('showtrigger');
+		showAllFields();
+	}
+};
+
+const showAfterDoubleClick = (e, rowLength) => {
+	// tu sprawdzamy czy ilosc flag sie zgadza z iloscia bomb
 	if (boxes[e.target.id].bombsAround === boxes[e.target.id].bombsIndexes.length) {
-		console.log('dobrze dziala');
-		console.log(...boxes[e.target.id].bombsIndexes);
-		if (bombs.includes(boxes[e.target.id].bombsIndexes)) {
-			console.log('to tez poszlo');
-			console.log(boxes[e.target.id].bombsIndexes);
+		console.log('pierwszy warunek jest ok');
+
+		let j = Number.parseFloat(e.target.id);
+		if (j === 0) {
+			if (plateElements[j + 1].classList.contains('put-flag')) {
+				checkFlagAfterDoubleClick(j, j + 1);
+			}
+			if (plateElements[j + 1 + rowLength].classList.contains('put-flag')) {
+				checkFlagAfterDoubleClick(j, j + 1 + rowLength);
+			}
+
+			if (plateElements[j + rowLength].classList.contains('put-flag')) {
+				checkFlagAfterDoubleClick(j, j + rowLength);
+			}
+		} else if (j === rowLength - 1) {
+			if (plateElements[j - 1].classList.contains('put-flag')) {
+				checkFlagAfterDoubleClick(j, j - 1);
+			}
+			if (plateElements[j + rowLength].classList.contains('put-flag')) {
+				checkFlagAfterDoubleClick(j, j + rowLength);
+			}
+
+			if (plateElements[j + (rowLength - 1)].classList.contains('put-flag')) {
+				checkFlagAfterDoubleClick(j, j + rowLength - 1);
+			}
+		} else if (j === rowLength * rowLength - rowLength) {
+			if (plateElements[j + 1].classList.contains('put-flag')) {
+				checkFlagAfterDoubleClick(j, j + 1);
+			}
+			if (plateElements[j - rowLength].classList.contains('put-flag')) {
+				checkFlagAfterDoubleClick(j, j - rowLength);
+			}
+
+			if (plateElements[j - rowLength - 1].classList.contains('put-flag')) {
+				checkFlagAfterDoubleClick(j, j - rowLength - 1);
+			}
+		} else if (j === rowLength * rowLength - 1) {
+			if (plateElements[j - 1].classList.contains('put-flag')) {
+				checkFlagAfterDoubleClick(j, j - 1);
+			}
+			if (plateElements[j - rowLength].classList.contains('put-flag')) {
+				checkFlagAfterDoubleClick(j, j - rowLength);
+			}
+
+			if (plateElements[j - rowLength + 1].classList.contains('put-flag')) {
+				checkFlagAfterDoubleClick(j, j - rowLength + 1);
+			}
+		} else if (j % rowLength === 0) {
+			if (plateElements[j + 1].classList.contains('put-flag')) {
+				checkFlagAfterDoubleClick(j, j + 1);
+			}
+			if (plateElements[j - rowLength].classList.contains('put-flag')) {
+				checkFlagAfterDoubleClick(j, j - rowLength);
+			}
+			if (plateElements[j - rowLength + 1].classList.contains('put-flag')) {
+				checkFlagAfterDoubleClick(j, j - rowLength + 1);
+			}
+			if (plateElements[j + rowLength].classList.contains('put-flag')) {
+				checkFlagAfterDoubleClick(j, j + rowLength);
+			}
+			if (plateElements[j + rowLength + 1].classList.contains('put-flag')) {
+				checkFlagAfterDoubleClick(j, j + rowLength + 1);
+			}
+		} else if ((j + 1) % rowLength === 0) {
+			if (plateElements[j - 1].classList.contains('put-flag')) {
+				checkFlagAfterDoubleClick(j, j - 1);
+			}
+			if (plateElements[j - rowLength].classList.contains('put-flag')) {
+				checkFlagAfterDoubleClick(j, j - rowLength);
+			}
+			if (plateElements[j + rowLength - 1].classList.contains('put-flag')) {
+				checkFlagAfterDoubleClick(j, j + rowLength - 1);
+			}
+			if (plateElements[j + rowLength].classList.contains('put-flag')) {
+				checkFlagAfterDoubleClick(j, j + rowLength);
+			}
+			if (plateElements[j - rowLength - 1].classList.contains('put-flag')) {
+				checkFlagAfterDoubleClick(j, j - rowLength - 1);
+			}
+		} else if (j - rowLength < 0) {
+			if (plateElements[j - 1].classList.contains('put-flag')) {
+				checkFlagAfterDoubleClick(j, j - 1);
+			}
+			if (plateElements[j + 1].classList.contains('put-flag')) {
+				checkFlagAfterDoubleClick(j, j + 1);
+			}
+			if (plateElements[j + (rowLength - 1)].classList.contains('put-flag')) {
+				checkFlagAfterDoubleClick(j, j + (rowLength - 1));
+			}
+			if (plateElements[j + rowLength].classList.contains('put-flag')) {
+				checkFlagAfterDoubleClick(j, j + rowLength);
+			}
+			if (plateElements[j + rowLength + 1].classList.contains('put-flag')) {
+				checkFlagAfterDoubleClick(j, j + rowLength + 1);
+			}
+		} else if (j > rowLength * rowLength - rowLength) {
+			if (plateElements[j - 1].classList.contains('put-flag')) {
+				checkFlagAfterDoubleClick(j, j - 1);
+			}
+			if (plateElements[j + 1].classList.contains('put-flag')) {
+				checkFlagAfterDoubleClick(j, j + 1);
+			}
+			if (plateElements[j - (rowLength - 1)].classList.contains('put-flag')) {
+				checkFlagAfterDoubleClick(j, j - (rowLength - 1));
+			}
+			if (plateElements[j - rowLength + 1].classList.contains('put-flag')) {
+				checkFlagAfterDoubleClick(j, j - rowLength + 1);
+			}
+			if (plateElements[j - rowLength].classList.contains('put-flag')) {
+				checkFlagAfterDoubleClick(j, j - rowLength);
+			}
+		} else {
+			if (plateElements[j - 1].classList.contains('put-flag')) {
+				checkFlagAfterDoubleClick(j, j - 1);
+			}
+			if (plateElements[j + 1].classList.contains('put-flag')) {
+				checkFlagAfterDoubleClick(j, j + 1);
+			}
+			if (plateElements[j - rowLength + 1].classList.contains('put-flag')) {
+				checkFlagAfterDoubleClick(j, j - rowLength + 1);
+			}
+			if (plateElements[j - rowLength].classList.contains('put-flag')) {
+				checkFlagAfterDoubleClick(j, j - rowLength);
+			}
+			if (plateElements[j - rowLength - 1].classList.contains('put-flag')) {
+				checkFlagAfterDoubleClick(j, j - rowLength - 1);
+			}
+			if (plateElements[j + rowLength + 1].classList.contains('put-flag')) {
+				checkFlagAfterDoubleClick(j, j + rowLength + 1);
+			}
+			if (plateElements[j + rowLength].classList.contains('put-flag')) {
+				checkFlagAfterDoubleClick(j, j + rowLength);
+			}
+			if (plateElements[j + rowLength - 1].classList.contains('put-flag')) {
+				checkFlagAfterDoubleClick(j, j + rowLength - 1);
+			}
 		}
 	}
 };
@@ -688,23 +830,28 @@ const doubleClick = e => {
 
 		if (e.target.classList.contains('show-number-1') && flagsNumber === 1) {
 			// showEmptyForZeroBombs(k, chosenLevel[0]);
-			showAfterDoubleClick(e);
+			showAfterDoubleClick(e, chosenLevel[0]);
 		} else if (e.target.classList.contains('show-number-2') && flagsNumber === 2) {
 			// showEmptyForZeroBombs(k, chosenLevel[0]);
-			showAfterDoubleClick(e);
+			showAfterDoubleClick(e, chosenLevel[0]);
 		} else if (e.target.classList.contains('show-number-3') && flagsNumber === 3) {
 			// showEmptyForZeroBombs(k, chosenLevel[0]);
-			showAfterDoubleClick(e);
+			showAfterDoubleClick(e, chosenLevel[0]);
 		} else if (e.target.classList.contains('show-number-4') && flagsNumber === 4) {
 			// showEmptyForZeroBombs(k, chosenLevel[0]);
+			showAfterDoubleClick(e, chosenLevel[0]);
 		} else if (e.target.classList.contains('show-number-5') && flagsNumber === 5) {
 			// showEmptyForZeroBombs(k, chosenLevel[0]);
+			showAfterDoubleClick(e, chosenLevel[0]);
 		} else if (e.target.classList.contains('show-number-6') && flagsNumber === 6) {
 			// showEmptyForZeroBombs(k, chosenLevel[0]);
+			showAfterDoubleClick(e, chosenLevel[0]);
 		} else if (e.target.classList.contains('show-number-7') && flagsNumber === 7) {
 			// showEmptyForZeroBombs(k, chosenLevel[0]);
+			showAfterDoubleClick(e, chosenLevel[0]);
 		} else if (e.target.classList.contains('show-number-8') && flagsNumber === 8) {
 			// showEmptyForZeroBombs(k, chosenLevel[0]);
+			showAfterDoubleClick(e, chosenLevel[0]);
 		}
 
 		// Here you have to change function : showEmptyForZeroBombs , for something else, wchich opens fields, but not sure if they are empty, user could check wrong, so trigger and show all
@@ -722,4 +869,5 @@ gamePlate.addEventListener('click', leftClickCheckField);
 gamePlate.addEventListener('dblclick', doubleClick);
 gamePlate.addEventListener('contextmenu', doubleClick);
 statusFace.addEventListener('click', newGame);
+
 newGame();
