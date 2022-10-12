@@ -15,12 +15,12 @@ let bombs = [];
 let boxes = [];
 let bombsIndexes = [];
 
+let counterToFinishGame = 0;
 let bombsNumber = 0;
 let flagsNumber = 0;
 let flagsCounter = 0;
-// let timeInitializer = 0;
-// let count;
-// let seconds = 0;
+let seconds = 0;
+let timer;
 
 let chosenLevel = begginer;
 
@@ -265,8 +265,8 @@ const clearPlate = () => {
 	gamePlate.innerHTML = '';
 	counterTime.innerHTML = `000`;
 	flagsCounter = 0;
-	// timeInitializer = 0;
-	// seconds = 0;
+	counterToFinishGame = 0;
+	seconds = 0;
 	bombs = [];
 	boxes = [];
 	statusFace.classList.add('status-face-ok');
@@ -499,6 +499,27 @@ const showEmptyForZeroBombs = (i, rowLength) => {
 	}
 };
 
+const checkIfGameFinished = () => {
+	if (counterToFinishGame === 0) {
+		startGame();
+	}
+	counterToFinishGame = 0;
+	for (let i = 0; i < plateElements.length; i++) {
+		if (plateElements[i].classList.contains('show-empty') || plateElements[i].classList.contains('show-number')) {
+			counterToFinishGame++;
+		} else if (
+			plateElements[i].classList.contains('show-trigger') ||
+			plateElements[i].classList.contains('wrong-bet')
+		) {
+			endGame();
+		}
+	}
+	if (counterToFinishGame === plateElements.length - bombs.length) {
+		statusFace.classList.add('status-face-succes');
+		endGame();
+	}
+};
+
 const showEmpty = (i, rowLength) => {
 	if (!plateElements[i].classList.contains('put-flag')) {
 		if (boxes[i].bombsAround === 0) {
@@ -530,6 +551,7 @@ const showEmpty = (i, rowLength) => {
 			plateElements[i].classList.add('show-number-8');
 		}
 	}
+	checkIfGameFinished();
 };
 
 const leftClickCheckField = e => {
@@ -544,6 +566,7 @@ const leftClickCheckField = e => {
 			showAllFields();
 			// endGame();
 		}
+		checkIfGameFinished();
 	}
 };
 
@@ -693,9 +716,10 @@ const checkFlagAfterDoubleClick = (j, k) => {
 	if (bombs.includes(k)) {
 		showEmptyForZeroBombs(j, chosenLevel[0]);
 	} else {
-		plateElements[k].classList.add('showtrigger');
+		plateElements[k].classList.add('wrong-bet');
 		statusFace.classList.add('status-face-lost');
 		showAllFields();
+		checkIfGameFinished();
 	}
 };
 
@@ -886,30 +910,29 @@ const neutralFace = e => {
 	}
 };
 
-// const clockCounter = e => {
-// 	if (
-// 		e.target.classList.contains('show-empty') ||
-// 		(e.target.classList.contains('show-number') && timeInitializer === 0)
-// 	) {
-// 		timeInitializer++;
-// 		clearInterval(count);
-// 		count = setInterval(() => {
-// 			if (seconds < 9) {
-// 				seconds++;
-// 				counterTime.innerHTML = `00${seconds}`;
-// 			} else if (seconds < 100) {
-// 				seconds++;
-// 				counterTime.innerHTML = `0${seconds}`;
-// 			} else if (seconds < 1000) {
-// 				seconds++;
-// 				counterTime.innerHTML = `${seconds}`;
-// 			}
-// 		}, 1000);
-// 	}
-// 	// try it until there will be no fields to open and the same amount flag as bombs
-// };
+const endGame = () => {
+	clearInterval(timer);
+	console.log('end game: clock stop, save time, block plate to interact');
+};
+
+const startGame = () => {
+	clearInterval(timer);
+	timer = setInterval(() => {
+		if (seconds < 9) {
+			seconds++;
+			counterTime.innerHTML = `00${seconds}`;
+		} else if (seconds < 99) {
+			seconds++;
+			counterTime.innerHTML = `0${seconds}`;
+		} else if (seconds < 1000) {
+			seconds++;
+			counterTime.innerHTML = `${seconds}`;
+		}
+	}, 1000);
+};
 
 //  Listeners
+
 navBar.addEventListener('click', unfoldMenu);
 navItems.forEach(item => item.addEventListener('click', chooseLevel));
 document.addEventListener('contextmenu', countMines);
@@ -922,6 +945,5 @@ gamePlate.addEventListener('contextmenu', doubleClick);
 statusFace.addEventListener('click', newGame);
 gamePlate.addEventListener('mousedown', uncertainFace);
 gamePlate.addEventListener('mouseup', neutralFace);
-// gamePlate.addEventListener('click', clockCounter);
 
 newGame();
