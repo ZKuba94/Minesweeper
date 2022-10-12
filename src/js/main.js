@@ -272,6 +272,7 @@ const clearPlate = () => {
 	statusFace.classList.add('status-face-ok');
 	statusFace.classList.remove('status-face-lost');
 	statusFace.classList.remove('status-face-succes');
+	statusFace.classList.remove('status-face-wow');
 };
 // Navigation things, option, new game, select level...
 const chooseLevel = e => {
@@ -565,7 +566,6 @@ const leftClickCheckField = e => {
 			e.target.classList.add('show-trigger');
 			statusFace.classList.add('status-face-lost');
 			showAllFields();
-			// endGame();
 		}
 		checkIfGameFinished();
 	}
@@ -950,8 +950,6 @@ const playTime = () => {
 	gamePlate.addEventListener('contextmenu', doubleClick);
 	gamePlate.addEventListener('mousedown', uncertainFace);
 	gamePlate.addEventListener('mouseup', neutralFace);
-
-	console.log('listenery dzialja');
 };
 const pauseTime = () => {
 	gamePlate.removeEventListener('contextmenu', putFlag);
@@ -962,8 +960,6 @@ const pauseTime = () => {
 	gamePlate.removeEventListener('mousedown', uncertainFace);
 	gamePlate.removeEventListener('mouseup', neutralFace);
 	gamePlate.addEventListener('contextmenu', noRightClickMenu);
-
-	console.log('nie powinny dzialac listenery');
 };
 
 statusFace.addEventListener('click', newGame);
