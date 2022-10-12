@@ -334,6 +334,7 @@ const putFlag = e => {
 };
 
 const newGame = () => {
+	playTime();
 	countMines();
 	clearPlate();
 	shuffle(countFields(chosenLevel), chosenLevel[2]);
@@ -912,7 +913,7 @@ const neutralFace = e => {
 
 const endGame = () => {
 	clearInterval(timer);
-	console.log('end game: clock stop, save time, block plate to interact');
+	pauseTime();
 };
 
 const startGame = () => {
@@ -931,19 +932,40 @@ const startGame = () => {
 	}, 1000);
 };
 
+const noRightClickMenu = e => {
+	e.preventDefault();
+};
+
 //  Listeners
 
 navBar.addEventListener('click', unfoldMenu);
 navItems.forEach(item => item.addEventListener('click', chooseLevel));
 document.addEventListener('contextmenu', countMines);
-gamePlate.addEventListener('contextmenu', putFlag);
-gamePlate.addEventListener('click', leftClickCheckField);
-gamePlate.addEventListener('mouseup', leftClickCheckField);
-gamePlate.addEventListener('dblclick', doubleClick);
-gamePlate.addEventListener('contextmenu', doubleClick);
+
+const playTime = () => {
+	gamePlate.addEventListener('contextmenu', putFlag);
+	gamePlate.addEventListener('click', leftClickCheckField);
+	gamePlate.addEventListener('mouseup', leftClickCheckField);
+	gamePlate.addEventListener('dblclick', doubleClick);
+	gamePlate.addEventListener('contextmenu', doubleClick);
+	gamePlate.addEventListener('mousedown', uncertainFace);
+	gamePlate.addEventListener('mouseup', neutralFace);
+
+	console.log('listenery dzialja');
+};
+const pauseTime = () => {
+	gamePlate.removeEventListener('contextmenu', putFlag);
+	gamePlate.removeEventListener('click', leftClickCheckField);
+	gamePlate.removeEventListener('mouseup', leftClickCheckField);
+	gamePlate.removeEventListener('dblclick', doubleClick);
+	gamePlate.removeEventListener('contextmenu', doubleClick);
+	gamePlate.removeEventListener('mousedown', uncertainFace);
+	gamePlate.removeEventListener('mouseup', neutralFace);
+	gamePlate.addEventListener('contextmenu', noRightClickMenu);
+
+	console.log('nie powinny dzialac listenery');
+};
 
 statusFace.addEventListener('click', newGame);
-gamePlate.addEventListener('mousedown', uncertainFace);
-gamePlate.addEventListener('mouseup', neutralFace);
 
 newGame();
