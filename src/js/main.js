@@ -1,7 +1,11 @@
 const gamePlate = document.querySelector('.game-box__plate');
 const navBar = document.querySelector('.navbar');
-const gameList = document.querySelector('.navbar__list-game');
-const navItems = gameList.querySelectorAll('.navbar__list__item');
+const gameList = navBar.querySelector('.navbar__list-game');
+const optionsList = navBar.querySelector('.navbar__list-options');
+const helpList = navBar.querySelector('.navbar__list-help');
+const navItemsGame = gameList.querySelectorAll('.navbar__list__item');
+const navItemsOptions = optionsList.querySelectorAll('.navbar__list__item');
+const navItemsHelp = helpList.querySelectorAll('.navbar__list__item');
 const counterMines = document.querySelector('.counter-mines');
 const counterTime = document.querySelector('.counter-time');
 const statusFace = document.querySelector('.game-box__bar__status-face');
@@ -10,18 +14,15 @@ const plateElements = gamePlate.getElementsByClassName('game-box__plate__element
 const begginer = [8, 8, 10];
 const intermediate = [16, 16, 40];
 const expert = [31, 16, 99];
-
 let bombs = [];
 let boxes = [];
 let bombsIndexes = [];
-
 let counterToFinishGame = 0;
 let bombsNumber = 0;
 let flagsNumber = 0;
 let flagsCounter = 0;
 let seconds = 0;
 let timer;
-
 let chosenLevel = begginer;
 
 // Function to run before first play
@@ -277,7 +278,10 @@ const clearPlate = () => {
 // Navigation things, option, new game, select level...
 const chooseLevel = e => {
 	clearPlate();
-	if (e.target.classList.contains('begginer')) {
+	if (e.target.textContent === 'New Game') {
+		newGame();
+		console.log('nowa gra');
+	} else if (e.target.classList.contains('begginer')) {
 		chosenLevel = begginer;
 		gamePlate.classList.remove('plate-intermediate');
 		gamePlate.classList.remove('plate-expert');
@@ -293,14 +297,38 @@ const chooseLevel = e => {
 		gamePlate.classList.remove('plate-intermediate');
 		gamePlate.classList.add('plate-expert');
 	}
-	navItems.forEach(item => item.classList.toggle('navbar__list-game__item'));
+	navItemsGame.forEach(item => item.classList.toggle('navbar__list-game__item'));
 
 	newGame();
 };
 
+const menuAction = e => {
+	if (
+		e.target.classList.contains('navbar__list-game') ||
+		e.target.classList.contains('navbar__list-options') ||
+		e.target.classList.contains('navbar__list-help')
+	) {
+		unfoldMenu(e);
+	} else {
+		navItemsGame.forEach(item => item.classList.remove('navbar__list-game__item'));
+		navItemsOptions.forEach(item => item.classList.remove('navbar__list-options__item'));
+		navItemsHelp.forEach(item => item.classList.remove('navbar__list-help__item'));
+	}
+};
+
 const unfoldMenu = e => {
 	if (e.target.classList.contains('navbar__list-game')) {
-		navItems.forEach(item => item.classList.toggle('navbar__list-game__item'));
+		navItemsGame.forEach(item => item.classList.toggle('navbar__list-game__item'));
+		navItemsOptions.forEach(item => item.classList.remove('navbar__list-options__item'));
+		navItemsHelp.forEach(item => item.classList.remove('navbar__list-help__item'));
+	} else if (e.target.classList.contains('navbar__list-options')) {
+		navItemsOptions.forEach(item => item.classList.toggle('navbar__list-options__item'));
+		navItemsGame.forEach(item => item.classList.remove('navbar__list-game__item'));
+		navItemsHelp.forEach(item => item.classList.remove('navbar__list-help__item'));
+	} else if (e.target.classList.contains('navbar__list-help')) {
+		navItemsHelp.forEach(item => item.classList.toggle('navbar__list-help__item'));
+		navItemsGame.forEach(item => item.classList.remove('navbar__list-game__item'));
+		navItemsOptions.forEach(item => item.classList.remove('navbar__list-options__item'));
 	}
 };
 // Inner bar things, counters and status face
@@ -344,7 +372,7 @@ const newGame = () => {
 	drawGamePlate(countFields(chosenLevel));
 };
 
-const showAllFields = () => {
+const showAllFieldsWrongBet = () => {
 	for (const box of boxes) {
 		if (box.bomb === true) {
 			if (!plateElements[box.id].classList.contains('put-flag')) {
@@ -559,13 +587,12 @@ const showEmpty = (i, rowLength) => {
 const leftClickCheckField = e => {
 	if (e.button === 0) {
 		if (e.target.classList.contains('put-flag')) {
-			e.preventDefault();
 		} else if (boxes[e.target.id].bomb === false) {
 			showEmpty(Number.parseFloat(e.target.id), chosenLevel[0]);
 		} else if (boxes[e.target.id].bomb === true) {
 			e.target.classList.add('show-trigger');
 			statusFace.classList.add('status-face-lost');
-			showAllFields();
+			showAllFieldsWrongBet();
 		}
 		checkIfGameFinished();
 	}
@@ -713,161 +740,159 @@ const checkFlagsAround = (i, rowLength) => {
 	}
 };
 
-const checkFlagAfterDoubleClick = (j, k) => {
+const showFieldAfterDoubleClick = (j, k) => {
 	if (bombs.includes(k)) {
 		showEmptyForZeroBombs(j, chosenLevel[0]);
 	} else {
 		plateElements[k].classList.add('wrong-bet');
+		// try to code something that makes nearest bomb trigger after wrong-bet and double click on number
 		statusFace.classList.add('status-face-lost');
-		showAllFields();
+		showAllFieldsWrongBet();
 		checkIfGameFinished();
+		plateElements[k].classList.add('show-trigger');
 	}
 };
 
-const showAfterDoubleClick = (e, rowLength) => {
+const checkAfterDoubleClick = (e, rowLength) => {
 	if (boxes[e.target.id].bombsAround === boxes[e.target.id].bombsIndexes.length) {
 		let j = Number.parseFloat(e.target.id);
 		if (j === 0) {
 			// top-left corner
 			if (plateElements[j + 1].classList.contains('put-flag')) {
-				checkFlagAfterDoubleClick(j, j + 1);
+				showFieldAfterDoubleClick(j, j + 1);
 			}
 			if (plateElements[j + 1 + rowLength].classList.contains('put-flag')) {
-				checkFlagAfterDoubleClick(j, j + 1 + rowLength);
+				showFieldAfterDoubleClick(j, j + 1 + rowLength);
 			}
-
 			if (plateElements[j + rowLength].classList.contains('put-flag')) {
-				checkFlagAfterDoubleClick(j, j + rowLength);
+				showFieldAfterDoubleClick(j, j + rowLength);
 			}
 		} else if (j === rowLength - 1) {
 			// top-right corner
 			if (plateElements[j - 1].classList.contains('put-flag')) {
-				checkFlagAfterDoubleClick(j, j - 1);
+				showFieldAfterDoubleClick(j, j - 1);
 			}
 			if (plateElements[j + rowLength].classList.contains('put-flag')) {
-				checkFlagAfterDoubleClick(j, j + rowLength);
+				showFieldAfterDoubleClick(j, j + rowLength);
 			}
-
 			if (plateElements[j + rowLength - 1].classList.contains('put-flag')) {
-				checkFlagAfterDoubleClick(j, j + rowLength - 1);
+				showFieldAfterDoubleClick(j, j + rowLength - 1);
 			}
 		} else if (j === countFields(chosenLevel) - rowLength) {
 			// bottom-left corner
 			if (plateElements[j + 1].classList.contains('put-flag')) {
-				checkFlagAfterDoubleClick(j, j + 1);
+				showFieldAfterDoubleClick(j, j + 1);
 			}
 			if (plateElements[j - rowLength].classList.contains('put-flag')) {
-				checkFlagAfterDoubleClick(j, j - rowLength);
+				showFieldAfterDoubleClick(j, j - rowLength);
 			}
-
 			if (plateElements[j - rowLength + 1].classList.contains('put-flag')) {
-				checkFlagAfterDoubleClick(j, j - rowLength + 1);
+				showFieldAfterDoubleClick(j, j - rowLength + 1);
 			}
 		} else if (j === countFields(chosenLevel) - 1) {
 			// bottom-right corner
 			if (plateElements[j - 1].classList.contains('put-flag')) {
-				checkFlagAfterDoubleClick(j, j - 1);
+				showFieldAfterDoubleClick(j, j - 1);
 			}
 			if (plateElements[j - rowLength].classList.contains('put-flag')) {
-				checkFlagAfterDoubleClick(j, j - rowLength);
+				showFieldAfterDoubleClick(j, j - rowLength);
 			}
-
 			if (plateElements[j - rowLength - 1].classList.contains('put-flag')) {
-				checkFlagAfterDoubleClick(j, j - rowLength - 1);
+				showFieldAfterDoubleClick(j, j - rowLength - 1);
 			}
 		} else if (j % rowLength === 0) {
 			// all left side without corners
 			if (plateElements[j + 1].classList.contains('put-flag')) {
-				checkFlagAfterDoubleClick(j, j + 1);
+				showFieldAfterDoubleClick(j, j + 1);
 			}
 			if (plateElements[j - rowLength].classList.contains('put-flag')) {
-				checkFlagAfterDoubleClick(j, j - rowLength);
+				showFieldAfterDoubleClick(j, j - rowLength);
 			}
 			if (plateElements[j - rowLength + 1].classList.contains('put-flag')) {
-				checkFlagAfterDoubleClick(j, j - rowLength + 1);
+				showFieldAfterDoubleClick(j, j - rowLength + 1);
 			}
 			if (plateElements[j + rowLength].classList.contains('put-flag')) {
-				checkFlagAfterDoubleClick(j, j + rowLength);
+				showFieldAfterDoubleClick(j, j + rowLength);
 			}
 			if (plateElements[j + rowLength + 1].classList.contains('put-flag')) {
-				checkFlagAfterDoubleClick(j, j + rowLength + 1);
+				showFieldAfterDoubleClick(j, j + rowLength + 1);
 			}
 		} else if ((j + 1) % rowLength === 0) {
 			// all right side without corners
 			if (plateElements[j - 1].classList.contains('put-flag')) {
-				checkFlagAfterDoubleClick(j, j - 1);
+				showFieldAfterDoubleClick(j, j - 1);
 			}
 			if (plateElements[j - rowLength].classList.contains('put-flag')) {
-				checkFlagAfterDoubleClick(j, j - rowLength);
+				showFieldAfterDoubleClick(j, j - rowLength);
 			}
 			if (plateElements[j + rowLength - 1].classList.contains('put-flag')) {
-				checkFlagAfterDoubleClick(j, j + rowLength - 1);
+				showFieldAfterDoubleClick(j, j + rowLength - 1);
 			}
 			if (plateElements[j + rowLength].classList.contains('put-flag')) {
-				checkFlagAfterDoubleClick(j, j + rowLength);
+				showFieldAfterDoubleClick(j, j + rowLength);
 			}
 			if (plateElements[j - rowLength - 1].classList.contains('put-flag')) {
-				checkFlagAfterDoubleClick(j, j - rowLength - 1);
+				showFieldAfterDoubleClick(j, j - rowLength - 1);
 			}
 		} else if (j - rowLength < 0) {
 			// all top line without corners
 			if (plateElements[j - 1].classList.contains('put-flag')) {
-				checkFlagAfterDoubleClick(j, j - 1);
+				showFieldAfterDoubleClick(j, j - 1);
 			}
 			if (plateElements[j + 1].classList.contains('put-flag')) {
-				checkFlagAfterDoubleClick(j, j + 1);
+				showFieldAfterDoubleClick(j, j + 1);
 			}
 			if (plateElements[j + rowLength - 1].classList.contains('put-flag')) {
-				checkFlagAfterDoubleClick(j, j + rowLength - 1);
+				showFieldAfterDoubleClick(j, j + rowLength - 1);
 			}
 			if (plateElements[j + rowLength].classList.contains('put-flag')) {
-				checkFlagAfterDoubleClick(j, j + rowLength);
+				showFieldAfterDoubleClick(j, j + rowLength);
 			}
 			if (plateElements[j + rowLength + 1].classList.contains('put-flag')) {
-				checkFlagAfterDoubleClick(j, j + rowLength + 1);
+				showFieldAfterDoubleClick(j, j + rowLength + 1);
 			}
 		} else if (j > countFields(chosenLevel) - rowLength) {
 			// all bottom line without corners
 			if (plateElements[j - 1].classList.contains('put-flag')) {
-				checkFlagAfterDoubleClick(j, j - 1);
+				showFieldAfterDoubleClick(j, j - 1);
 			}
 			if (plateElements[j + 1].classList.contains('put-flag')) {
-				checkFlagAfterDoubleClick(j, j + 1);
+				showFieldAfterDoubleClick(j, j + 1);
 			}
 			if (plateElements[j - rowLength - 1].classList.contains('put-flag')) {
-				checkFlagAfterDoubleClick(j, j - rowLength - 1);
+				showFieldAfterDoubleClick(j, j - rowLength - 1);
 			}
 			if (plateElements[j - rowLength + 1].classList.contains('put-flag')) {
-				checkFlagAfterDoubleClick(j, j - rowLength + 1);
+				showFieldAfterDoubleClick(j, j - rowLength + 1);
 			}
 			if (plateElements[j - rowLength].classList.contains('put-flag')) {
-				checkFlagAfterDoubleClick(j, j - rowLength);
+				showFieldAfterDoubleClick(j, j - rowLength);
 			}
 		} else {
 			// rest fields away from edges
 			if (plateElements[j - 1].classList.contains('put-flag')) {
-				checkFlagAfterDoubleClick(j, j - 1);
+				showFieldAfterDoubleClick(j, j - 1);
 			}
 			if (plateElements[j + 1].classList.contains('put-flag')) {
-				checkFlagAfterDoubleClick(j, j + 1);
+				showFieldAfterDoubleClick(j, j + 1);
 			}
 			if (plateElements[j - rowLength + 1].classList.contains('put-flag')) {
-				checkFlagAfterDoubleClick(j, j - rowLength + 1);
+				showFieldAfterDoubleClick(j, j - rowLength + 1);
 			}
 			if (plateElements[j - rowLength].classList.contains('put-flag')) {
-				checkFlagAfterDoubleClick(j, j - rowLength);
+				showFieldAfterDoubleClick(j, j - rowLength);
 			}
 			if (plateElements[j - rowLength - 1].classList.contains('put-flag')) {
-				checkFlagAfterDoubleClick(j, j - rowLength - 1);
+				showFieldAfterDoubleClick(j, j - rowLength - 1);
 			}
 			if (plateElements[j + rowLength + 1].classList.contains('put-flag')) {
-				checkFlagAfterDoubleClick(j, j + rowLength + 1);
+				showFieldAfterDoubleClick(j, j + rowLength + 1);
 			}
 			if (plateElements[j + rowLength].classList.contains('put-flag')) {
-				checkFlagAfterDoubleClick(j, j + rowLength);
+				showFieldAfterDoubleClick(j, j + rowLength);
 			}
 			if (plateElements[j + rowLength - 1].classList.contains('put-flag')) {
-				checkFlagAfterDoubleClick(j, j + rowLength - 1);
+				showFieldAfterDoubleClick(j, j + rowLength - 1);
 			}
 		}
 	}
@@ -875,27 +900,26 @@ const showAfterDoubleClick = (e, rowLength) => {
 
 const doubleClick = e => {
 	let k = Number.parseFloat(e.target.id);
-	e.preventDefault();
 	if (e.target.classList.contains('show-number')) {
 		flagsNumber = 0;
 		checkFlagsAround(Number.parseFloat(e.target.id), chosenLevel[0]);
 
 		if (e.target.classList.contains('show-number-1') && flagsNumber === 1) {
-			showAfterDoubleClick(e, chosenLevel[0]);
+			checkAfterDoubleClick(e, chosenLevel[0]);
 		} else if (e.target.classList.contains('show-number-2') && flagsNumber === 2) {
-			showAfterDoubleClick(e, chosenLevel[0]);
+			checkAfterDoubleClick(e, chosenLevel[0]);
 		} else if (e.target.classList.contains('show-number-3') && flagsNumber === 3) {
-			showAfterDoubleClick(e, chosenLevel[0]);
+			checkAfterDoubleClick(e, chosenLevel[0]);
 		} else if (e.target.classList.contains('show-number-4') && flagsNumber === 4) {
-			showAfterDoubleClick(e, chosenLevel[0]);
+			checkAfterDoubleClick(e, chosenLevel[0]);
 		} else if (e.target.classList.contains('show-number-5') && flagsNumber === 5) {
-			showAfterDoubleClick(e, chosenLevel[0]);
+			checkAfterDoubleClick(e, chosenLevel[0]);
 		} else if (e.target.classList.contains('show-number-6') && flagsNumber === 6) {
-			showAfterDoubleClick(e, chosenLevel[0]);
+			checkAfterDoubleClick(e, chosenLevel[0]);
 		} else if (e.target.classList.contains('show-number-7') && flagsNumber === 7) {
-			showAfterDoubleClick(e, chosenLevel[0]);
+			checkAfterDoubleClick(e, chosenLevel[0]);
 		} else if (e.target.classList.contains('show-number-8') && flagsNumber === 8) {
-			showAfterDoubleClick(e, chosenLevel[0]);
+			checkAfterDoubleClick(e, chosenLevel[0]);
 		}
 	}
 };
@@ -938,10 +962,10 @@ const noRightClickMenu = e => {
 
 //  Listeners
 
-navBar.addEventListener('click', unfoldMenu);
-navItems.forEach(item => item.addEventListener('click', chooseLevel));
+navItemsGame.forEach(item => item.addEventListener('click', chooseLevel));
+document.addEventListener('click', menuAction);
 document.addEventListener('contextmenu', countMines);
-
+statusFace.addEventListener('click', newGame);
 const playTime = () => {
 	gamePlate.addEventListener('contextmenu', putFlag);
 	gamePlate.addEventListener('click', leftClickCheckField);
@@ -961,7 +985,4 @@ const pauseTime = () => {
 	gamePlate.removeEventListener('mouseup', neutralFace);
 	gamePlate.addEventListener('contextmenu', noRightClickMenu);
 };
-
-statusFace.addEventListener('click', newGame);
-
 newGame();
