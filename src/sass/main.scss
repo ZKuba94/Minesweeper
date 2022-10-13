@@ -6,12 +6,8 @@
 	margin: 0;
 	padding: 0;
 }
-// :root {
-// 	font-display: swap;
-// }
 html {
 	font-size: 62.5%;
-	// scroll-behavior: smooth;
 }
 body {
 	position: relative;
@@ -47,30 +43,37 @@ body {
 	flex-direction: column;
 	align-items: flex-start;
 }
-
+.title {
+	font-size: 2.6rem;
+}
 //  Folded menu with some options - hided for now.
 
 .navbar {
 	display: flex;
-	width: 300px;
+	width: 100%;
 	height: 40px;
-	overflow: visible;
 
 	&__list {
 		position: relative;
 		display: flex;
 		flex-direction: column;
-		align-content: center;
-		font-size: 2rem;
+		font-size: 2.2rem;
+		width: 10rem;
 		list-style: none;
-		padding: 1rem;
-
 		cursor: pointer;
-
+		&::before {
+			padding: 0.5rem 1rem 0.5rem 0.5rem;
+			margin-bottom: 0.4rem;
+			text-align: center;
+		}
+		&:hover {
+			background-color: $dark-mode-nav-color;
+		}
 		&__item {
-			display: none;
-			// position: static;
-			// width: 100%;
+			display: block;
+			overflow: hidden;
+			width: 16rem;
+			font-size: 2rem;
 			background-color: $dark-mode-font-color;
 			cursor: pointer;
 			&:hover {
@@ -78,78 +81,53 @@ body {
 			}
 		}
 	}
-	&__list-game {
-		&__item:first-child {
-			border-top: #333 2px solid;
-		}
-		&__item:last-child {
-			border-bottom: #333 2px solid;
-		}
-		&__item {
-			display: flex;
-			border: #333 2px solid;
-			border-top: none;
-			border-bottom: none;
-			padding: 0.2rem;
-			overflow: visible;
-		}
+	&__list-game::before {
+		content: 'Game';
 	}
-	&__list-options {
-		&__item:first-child {
-			border-top: #333 2px solid;
-		}
-		&__item:last-child {
-			border-bottom: #333 2px solid;
-		}
-		&__item {
-			display: block;
-			border: #333 2px solid;
-			border-top: none;
-			border-bottom: none;
-			padding: 0.2rem;
-		}
+	&__list-options::before {
+		content: 'Options';
 	}
+	&__list-help::before {
+		content: 'Help';
+	}
+	&__list-game,
+	&__list-options,
 	&__list-help {
+		overflow: visible;
 		&__item:first-child {
-			border-top: #333 2px solid;
+			border-top: $border-box 2px solid;
 		}
 		&__item:last-child {
-			border-bottom: #333 2px solid;
+			border-bottom: $border-box 2px solid;
 		}
 		&__item {
-			display: block;
-			border: #333 2px solid;
+			overflow: visible;
+			border: $border-box 2px solid;
 			border-top: none;
 			border-bottom: none;
-			padding: 0.2rem;
+			padding: 0.4rem;
 		}
 	}
 }
 
 .game-box {
-	// Game plate, squares and bar with counters
-	overflow: visible;
 	font-family: 'Roboto Mono', monospace;
 	&__bar {
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
 		align-items: center;
-		border: #333 5px solid;
+		border: $border-box 5px solid;
 		border-bottom: none;
 		padding: 1rem;
-		font-size: 3rem;
+		font-size: $bar-font-size;
 
 		&__item {
-			border: #333 3px solid;
+			border: $border-box 3px solid;
 			padding: 0.5rem;
 		}
-		// &__item-counter-time::before {
-		// 	content: '000';
-		// }
 		&__status-face {
-			border: #333 1px solid;
-			padding: 0.5rem;
+			font-size: $face-size;
 			cursor: pointer;
 		}
 		.status-face-ok::before {
@@ -167,53 +145,46 @@ body {
 	}
 
 	// Game border, squares with bomb
-
 	// To custom game mode, make a number of columns and rows variable
 	.plate-begginer {
 		// 8 x 8 size and 10 bombs
 		display: grid;
-		grid-template-columns: repeat(8, 3.5rem);
-		grid-template-rows: repeat(8, 3.5rem);
-		grid-column-gap: 0.2rem;
-		grid-row-gap: 0.2rem;
+		grid-template-columns: repeat(8, $boxes-size-big);
+		grid-template-rows: repeat(8, $boxes-size-big);
 	}
 	.plate-intermediate {
 		// 16 x 16 size and 40 bombs
 		display: grid;
-		grid-template-columns: repeat(16, 3rem);
-		grid-template-rows: repeat(16, 3rem);
-		grid-column-gap: 0.2rem;
-		grid-row-gap: 0.2rem;
+		grid-template-columns: repeat(16, $boxes-size-medium);
+		grid-template-rows: repeat(16, $boxes-size-medium);
 	}
 	.plate-expert {
 		// 31 x 16 size and 99 bombs
 		display: grid;
-		grid-template-columns: repeat(31, 3.5rem);
-		grid-template-rows: repeat(16, 3.5rem);
-		grid-column-gap: 0.2rem;
-		grid-row-gap: 0.2rem;
+		grid-template-columns: repeat(31, $boxes-size-medium);
+		grid-template-rows: repeat(16, $boxes-size-medium);
 	}
-	// .plate-custom {
-	// 	// * x * size and * bombs
-	// 	display: grid;
-	// 	grid-template-columns: repeat($column-number, 3.5rem);
-	// 	grid-template-rows: repeat($row-number, 3.5rem);
-	// 	grid-column-gap: 0.2rem;
-	// 	grid-row-gap: 0.2rem;
-	// }
+	.plate-custom {
+		// * x * size and * bombs
+		display: grid;
+		grid-template-columns: repeat($custom-columns, $boxes-size-medium);
+		grid-template-rows: repeat($custom-rows, $boxes-size-medium);
+	}
 
 	&__plate {
-		border: #333 5px solid;
+		border: $border-box 5px solid;
 		padding: 1rem;
+		grid-column-gap: $grid-gap;
+		grid-row-gap: $grid-gap;
 		&__element {
-			background-color: #333;
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			font-size: 3rem;
-			-webkit-box-shadow: 0px 0px 24px 0px rgba(66, 68, 90, 1);
-			-moz-box-shadow: 0px 0px 24px 0px rgba(66, 68, 90, 1);
-			box-shadow: 0px 0px 24px 0px rgba(66, 68, 90, 1);
+			font-size: $numbers-size;
+			background-color: $hidden-box-color;
+			-webkit-box-shadow: 0px 0px 24px 0px $hidden-box-color-shadow;
+			-moz-box-shadow: 0px 0px 24px 0px $hidden-box-color-shadow;
+			box-shadow: 0px 0px 8px 2px $hidden-box-color-shadow;
 		}
 		.put-flag {
 			&::before {
@@ -221,83 +192,73 @@ body {
 			}
 		}
 		.show-empty {
-			background-color: rgba(139, 141, 161, 0.6);
-			-webkit-box-shadow: inset 0px 0px 24px 0px rgba(58, 58, 58, 0.31);
-			-moz-box-shadow: inset 0px 0px 24px 0px rgba(58, 58, 58, 0.31);
-			box-shadow: inset 0px 0px 24px 0px rgba(58, 58, 58, 0.31);
-			// &::before {
-			// 	content: '';
-			// }
+			background-color: $empty-shown-box-color;
+			-webkit-box-shadow: inset 0px 0px 24px 0px $empty-shown-box-color-shadow;
+			-moz-box-shadow: inset 0px 0px 24px 0px $empty-shown-box-color-shadow;
+			box-shadow: inset 0px 0px 30px 10px $empty-shown-box-color-shadow;
 		}
 		.show-number {
-			background-color: rgba(139, 141, 161, 0.6);
-			-webkit-box-shadow: inset 0px 0px 24px 0px rgba(58, 58, 58, 0.31);
-			-moz-box-shadow: inset 0px 0px 24px 0px rgba(58, 58, 58, 0.31);
-			box-shadow: inset 0px 0px 24px 0px rgba(58, 58, 58, 0.31);
-
-			&-0 {
-				background-color: rgba(139, 141, 161, 0.6);
-				-webkit-box-shadow: inset 0px 0px 24px 0px rgba(58, 58, 58, 0.31);
-				-moz-box-shadow: inset 0px 0px 24px 0px rgba(58, 58, 58, 0.31);
-				box-shadow: inset 0px 0px 24px 0px rgba(58, 58, 58, 0.31);
-			}
+			background-color: $empty-shown-box-color;
+			-webkit-box-shadow: inset 0px 0px 24px 0px $empty-shown-box-color-shadow;
+			-moz-box-shadow: inset 0px 0px 24px 0px $empty-shown-box-color-shadow;
+			box-shadow: inset 0px 0px 30px 10px $empty-shown-box-color-shadow;
 			&-1::before {
 				content: '1';
-				color: rgb(52, 98, 238);
+				color: $number-one;
 			}
 			&-2::before {
 				content: '2';
-				color: green;
+				color: $number-two;
 			}
 			&-3::before {
 				content: '3';
-				color: red;
+				color: $number-three;
 			}
 			&-4::before {
 				content: '4';
-				color: rgb(17, 46, 134);
+				color: $number-four;
 			}
 			&-5::before {
 				content: '5';
-				color: rgb(134, 26, 7);
+				color: $number-five;
 			}
 			&-6::before {
 				content: '6';
-				color: tomato;
+				color: $number-six;
 			}
 			&-7::before {
 				content: '7';
-				color: tomato;
+				color: $number-seven;
 			}
 			&-8::before {
 				content: '8';
-				color: tomato;
+				color: $number-eight;
 			}
 		}
 		.wrong-bet {
-			background-color: rgba(139, 141, 161, 0.6);
-			-webkit-box-shadow: inset 0px 0px 24px 0px rgba(58, 58, 58, 0.31);
-			-moz-box-shadow: inset 0px 0px 24px 0px rgba(58, 58, 58, 0.31);
-			box-shadow: inset 0px 0px 24px 0px rgba(58, 58, 58, 0.31);
+			background-color: $empty-shown-box-color;
+			-webkit-box-shadow: inset 0px 0px 24px 0px $empty-shown-box-color-shadow;
+			-moz-box-shadow: inset 0px 0px 24px 0px $empty-shown-box-color-shadow;
+			box-shadow: inset 0px 0px 24px 0px $empty-shown-box-color-shadow;
 			&::before {
 				content: '❗️';
 			}
 		}
 		.show-bomb {
-			background-color: rgba(139, 141, 161, 0.6);
-			-webkit-box-shadow: inset 0px 0px 24px 0px rgba(58, 58, 58, 0.31);
-			-moz-box-shadow: inset 0px 0px 24px 0px rgba(58, 58, 58, 0.31);
-			box-shadow: inset 0px 0px 24px 0px rgba(58, 58, 58, 0.31);
+			background-color: $empty-shown-box-color;
+			-webkit-box-shadow: inset 0px 0px 24px 0px $empty-shown-box-color-shadow;
+			-moz-box-shadow: inset 0px 0px 24px 0px $empty-shown-box-color-shadow;
+			box-shadow: inset 0px 0px 24px 0px $empty-shown-box-color-shadow;
 			&::before {
 				content: '✹';
 				color: #000;
 			}
 		}
 		.show-trigger {
-			background-color: rgba(139, 141, 161, 0.6);
-			-webkit-box-shadow: inset 0px 0px 24px 0px rgba(58, 58, 58, 0.31);
-			-moz-box-shadow: inset 0px 0px 24px 0px rgba(58, 58, 58, 0.31);
-			box-shadow: inset 0px 0px 24px 0px rgba(58, 58, 58, 0.31);
+			background-color: $empty-shown-box-color;
+			-webkit-box-shadow: inset 0px 0px 24px 0px $empty-shown-box-color-shadow;
+			-moz-box-shadow: inset 0px 0px 24px 0px $empty-shown-box-color-shadow;
+			box-shadow: inset 0px 0px 24px 0px $empty-shown-box-color-shadow;
 			&::before {
 				content: '💥';
 			}

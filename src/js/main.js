@@ -25,6 +25,8 @@ let seconds = 0;
 let timer;
 let chosenLevel = begginer;
 
+// Things to improve : After double click at the end, if you win, mark every bomb as a flag, if you lose, show trigger on bomb that you didn't spoted by flag and it cause lose.
+
 // Function to run before first play
 
 const countFields = chosenLevel => {
@@ -280,7 +282,6 @@ const chooseLevel = e => {
 	clearPlate();
 	if (e.target.textContent === 'New Game') {
 		newGame();
-		console.log('nowa gra');
 	} else if (e.target.classList.contains('begginer')) {
 		chosenLevel = begginer;
 		gamePlate.classList.remove('plate-intermediate');
@@ -363,6 +364,7 @@ const putFlag = e => {
 };
 
 const newGame = () => {
+	endGame();
 	playTime();
 	countMines();
 	clearPlate();
@@ -746,10 +748,10 @@ const showFieldAfterDoubleClick = (j, k) => {
 	} else {
 		plateElements[k].classList.add('wrong-bet');
 		// try to code something that makes nearest bomb trigger after wrong-bet and double click on number
+		// plateElements[k].classList.add('show-trigger') - this work wrong
 		statusFace.classList.add('status-face-lost');
 		showAllFieldsWrongBet();
 		checkIfGameFinished();
-		plateElements[k].classList.add('show-trigger');
 	}
 };
 
@@ -929,6 +931,7 @@ const uncertainFace = e => {
 		statusFace.classList.add('status-face-wow');
 	}
 };
+
 const neutralFace = e => {
 	if (e.button === 0) {
 		statusFace.classList.remove('status-face-wow');
