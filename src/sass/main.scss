@@ -1,4 +1,5 @@
 @import 'components';
+@import 'media';
 *,
 *::before,
 *::after {
@@ -50,7 +51,6 @@ body {
 
 .navbar {
 	display: flex;
-	width: 100%;
 	height: 40px;
 
 	&__list {
