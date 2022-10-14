@@ -195,7 +195,8 @@ body {
 		}
 		.put-flag {
 			&::before {
-				content: '🚩';
+				top: -5px;
+				content: var(--flag, $flag);
 			}
 		}
 		.show-empty {
@@ -257,7 +258,7 @@ body {
 			-moz-box-shadow: inset 0px 0px 24px 0px $shown-box-color-shadow;
 			box-shadow: inset 0px 0px 24px 0px $shown-box-color-shadow;
 			&::before {
-				content: '✹';
+				content: '💣';
 				color: #000;
 			}
 		}

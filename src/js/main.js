@@ -11,7 +11,6 @@ const counterMines = document.querySelector('.counter-mines');
 const counterTime = document.querySelector('.counter-time');
 const statusFace = document.querySelector('.game-box__bar__status-face');
 const plateElements = gamePlate.getElementsByClassName('game-box__plate__element');
-
 const begginer = [8, 8, 10];
 const intermediate = [16, 16, 40];
 const expert = [31, 16, 99];
@@ -26,7 +25,7 @@ let seconds = 0;
 let timer;
 let chosenLevel = begginer;
 
-// Things to improve : After double click at the end, if you win, mark every bomb as a flag, if you lose, show trigger on bomb that you didn't spoted by flag and it cause lose.
+// Things to improve : After double click at the end, if you lose, show trigger on bomb that you didn't spoted by flag and it cause lose.
 
 // Function to run before first play
 
@@ -311,6 +310,7 @@ const changeTheme = e => {
 		root.style.setProperty('--border-color', '#434a42');
 		root.style.setProperty('--dark-font-color', '#000');
 		root.style.setProperty('--light-font-color', '#fff');
+		root.style.setProperty('--flag', `'🚩'`);
 	} else if (e.target.classList.contains('second-theme')) {
 		root.style.setProperty('--linear', 'radial-gradient(91% 146%, #c455a8 47%, #e5cdc8 100%)');
 		root.style.setProperty('--items-color', '#c455a8');
@@ -318,6 +318,7 @@ const changeTheme = e => {
 		root.style.setProperty('--border-color', '#14281d');
 		root.style.setProperty('--dark-font-color', '#000');
 		root.style.setProperty('--light-font-color', '#fff');
+		root.style.setProperty('--flag', `'🐷'`);
 	} else if (e.target.classList.contains('third-theme')) {
 		root.style.setProperty('--linear', 'radial-gradient(91% 146%, #1b2cc1 47%, #1b2cc1 100%)');
 		root.style.setProperty('--items-color', '#1b2cc1');
@@ -325,6 +326,7 @@ const changeTheme = e => {
 		root.style.setProperty('--border-color', '#091540');
 		root.style.setProperty('--dark-font-color', '#000');
 		root.style.setProperty('--light-font-color', '#fff');
+		root.style.setProperty('--flag', `'🪖'`);
 	} else if (e.target.classList.contains('fourth-theme')) {
 		root.style.setProperty('--linear', 'radial-gradient(91% 146%, #6ba292 47%, #ddd 100%)');
 		root.style.setProperty('--items-color', '#6ba292');
@@ -332,6 +334,7 @@ const changeTheme = e => {
 		root.style.setProperty('--border-color', '#080f0f');
 		root.style.setProperty('--dark-font-color', '#000');
 		root.style.setProperty('--light-font-color', '#fff');
+		root.style.setProperty('--flag', `'🛟'`);
 	} else if (e.target.classList.contains('fifth-theme')) {
 		root.style.setProperty('--linear', 'radial-gradient(91% 146%, #a1cca5 47%, #ddd 100%)');
 		root.style.setProperty('--items-color', '#415d43');
@@ -339,6 +342,7 @@ const changeTheme = e => {
 		root.style.setProperty('--border-color', '#111d13');
 		root.style.setProperty('--dark-font-color', '#000');
 		root.style.setProperty('--light-font-color', '#000');
+		root.style.setProperty('--flag', `'🌳'`);
 	}
 };
 
@@ -587,6 +591,11 @@ const checkIfGameFinished = () => {
 	}
 	if (counterToFinishGame === plateElements.length - bombs.length) {
 		statusFace.classList.add('status-face-succes');
+		for (let i = 0; i < countFields(chosenLevel); i++) {
+			if (bombs.includes(i)) {
+				plateElements[i].classList.add('put-flag');
+			}
+		}
 		endGame();
 	}
 };
