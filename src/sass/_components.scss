@@ -1,12 +1,17 @@
-$first-linear: radial-gradient(91% 146%, rgba(255, 255, 255, 0.5) 47%, rgba(0, 0, 0, 0.5) 100%);
-$second-linear: linear-gradient(to right, #868f96 0%, #596164 100%);
-$third-linear: linear-gradient(-225deg, #b7f8db 0%, #50a7c2 100%);
-$fourth-linear: linear-gradient(-60deg, #16a085 0%, #f4d03f 100%);
+// Colors
 $transparent-dark-color: rgba(0, 0, 0, 0.5);
-$radius: 8px;
-$dark-mode-font-color: #fff;
-$dark-mode-nav-color: rgb(170, 162, 162);
-$border-box: #222;
+$main-font-color: #fff;
+$shown-box-color-shadow: rgba(58, 58, 58, 0.2);
+$hidden-box-color-shadow: rgba(45, 46, 58, 0.6);
+// Colors to change in JS
+$linear: radial-gradient(91% 146%, #282b29 47%, #282b29 100%);
+$items-color: #626c66;
+$plates-color: #d5c6e0;
+$border-color: #434a42;
+$dark-font-color: #000;
+$light-font-color: #fff;
+// Sizes and numbers
+$radius: 3px;
 $bar-font-size: 3rem;
 $face-size: 4rem;
 $boxes-size-medium: 3rem;
@@ -24,7 +29,3 @@ $number-five: rgb(134, 26, 7);
 $number-six: rgb(170, 35, 182);
 $number-seven: rgb(216, 99, 31);
 $number-eight: #000;
-$empty-shown-box-color: rgba(139, 141, 161, 0.6);
-$empty-shown-box-color-shadow: rgba(58, 58, 58, 0.31);
-$hidden-box-color: #444;
-$hidden-box-color-shadow: rgba(45, 46, 58, 0.8);

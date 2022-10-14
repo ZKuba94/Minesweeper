@@ -13,7 +13,7 @@ html {
 body {
 	position: relative;
 	font-family: 'Montserrat', sans-serif;
-	background-image: $second-linear;
+	background-image: var(--linear, $linear);
 	height: 100vh;
 	width: 100vw;
 	display: flex;
@@ -29,20 +29,21 @@ body {
 	display: block;
 	font-size: 2rem;
 	background-color: $transparent-dark-color;
-	border-radius: $radius;
+	border-radius: 8px;
 	padding: 15px;
 	text-decoration: none;
-	color: $dark-mode-font-color;
+	color: $main-font-color;
 }
 .main-site:hover {
 	background-color: $transparent-dark-color;
-	border-radius: $radius;
+	border-radius: 8px;
 }
 
 .wrapper {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
+	color: var(--light-font-color, $light-font-color);
 }
 .title {
 	font-size: 2.6rem;
@@ -67,17 +68,18 @@ body {
 			text-align: center;
 		}
 		&:hover {
-			background-color: $dark-mode-nav-color;
+			background-color: var(--items-color, var(--items-color, $items-color));
 		}
 		&__item {
 			display: block;
 			overflow: hidden;
 			width: 16rem;
 			font-size: 2rem;
-			background-color: $dark-mode-font-color;
+			background-color: #ddd;
+			color: var(--dark-font-color, $dark-font-color);
 			cursor: pointer;
 			&:hover {
-				background-color: $dark-mode-nav-color;
+				background-color: var(--items-color, $items-color);
 			}
 		}
 	}
@@ -85,7 +87,7 @@ body {
 		content: 'Game';
 	}
 	&__list-options::before {
-		content: 'Options';
+		content: 'Themes';
 	}
 	&__list-help::before {
 		content: 'Help';
@@ -95,14 +97,14 @@ body {
 	&__list-help {
 		overflow: visible;
 		&__item:first-child {
-			border-top: $border-box 2px solid;
+			border-top: var(--border-color, $border-color) 2px solid;
 		}
 		&__item:last-child {
-			border-bottom: $border-box 2px solid;
+			border-bottom: var(--border-color, $border-color) 2px solid;
 		}
 		&__item {
 			overflow: visible;
-			border: $border-box 2px solid;
+			border: var(--border-color, $border-color) 2px solid;
 			border-top: none;
 			border-bottom: none;
 			padding: 0.4rem;
@@ -112,19 +114,23 @@ body {
 
 .game-box {
 	font-family: 'Roboto Mono', monospace;
+	background-color: var(--plates-color, $plates-color);
 	&__bar {
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
 		align-items: center;
-		border: $border-box 5px solid;
+		border: var(--border-color, $border-color) 5px solid;
 		border-bottom: none;
 		padding: 1rem;
 		font-size: $bar-font-size;
+		background-color: var(--plates-color, $plates-color);
 
 		&__item {
-			border: $border-box 3px solid;
+			border: var(--border-color, $border-color) 3px solid;
 			padding: 0.5rem;
+			background-color: var(--items-color, $items-color);
+			border-radius: $radius;
 		}
 		&__status-face {
 			font-size: $face-size;
@@ -172,7 +178,7 @@ body {
 	}
 
 	&__plate {
-		border: $border-box 5px solid;
+		border: var(--border-color, $border-color) 5px solid;
 		padding: 1rem;
 		grid-column-gap: $grid-gap;
 		grid-row-gap: $grid-gap;
@@ -181,10 +187,11 @@ body {
 			justify-content: center;
 			align-items: center;
 			font-size: $numbers-size;
-			background-color: $hidden-box-color;
+			background-color: var(--items-color, $items-color);
 			-webkit-box-shadow: 0px 0px 24px 0px $hidden-box-color-shadow;
 			-moz-box-shadow: 0px 0px 24px 0px $hidden-box-color-shadow;
 			box-shadow: 0px 0px 8px 2px $hidden-box-color-shadow;
+			border-radius: $radius;
 		}
 		.put-flag {
 			&::before {
@@ -192,16 +199,16 @@ body {
 			}
 		}
 		.show-empty {
-			background-color: $empty-shown-box-color;
-			-webkit-box-shadow: inset 0px 0px 24px 0px $empty-shown-box-color-shadow;
-			-moz-box-shadow: inset 0px 0px 24px 0px $empty-shown-box-color-shadow;
-			box-shadow: inset 0px 0px 30px 10px $empty-shown-box-color-shadow;
+			background-color: var(--plates-color, $plates-color);
+			-webkit-box-shadow: inset 0px 0px 24px 0px $shown-box-color-shadow;
+			-moz-box-shadow: inset 0px 0px 24px 0px $shown-box-color-shadow;
+			box-shadow: inset 0px 0px 30px 10px $shown-box-color-shadow;
 		}
 		.show-number {
-			background-color: $empty-shown-box-color;
-			-webkit-box-shadow: inset 0px 0px 24px 0px $empty-shown-box-color-shadow;
-			-moz-box-shadow: inset 0px 0px 24px 0px $empty-shown-box-color-shadow;
-			box-shadow: inset 0px 0px 30px 10px $empty-shown-box-color-shadow;
+			background-color: var(--plates-color, $plates-color);
+			-webkit-box-shadow: inset 0px 0px 24px 0px $shown-box-color-shadow;
+			-moz-box-shadow: inset 0px 0px 24px 0px $shown-box-color-shadow;
+			box-shadow: inset 0px 0px 30px 10px $shown-box-color-shadow;
 			&-1::before {
 				content: '1';
 				color: $number-one;
@@ -236,29 +243,29 @@ body {
 			}
 		}
 		.wrong-bet {
-			background-color: $empty-shown-box-color;
-			-webkit-box-shadow: inset 0px 0px 24px 0px $empty-shown-box-color-shadow;
-			-moz-box-shadow: inset 0px 0px 24px 0px $empty-shown-box-color-shadow;
-			box-shadow: inset 0px 0px 24px 0px $empty-shown-box-color-shadow;
+			background-color: var(--plates-color, $plates-color);
+			-webkit-box-shadow: inset 0px 0px 24px 0px $shown-box-color-shadow;
+			-moz-box-shadow: inset 0px 0px 24px 0px $shown-box-color-shadow;
+			box-shadow: inset 0px 0px 24px 0px $shown-box-color-shadow;
 			&::before {
 				content: '❗️';
 			}
 		}
 		.show-bomb {
-			background-color: $empty-shown-box-color;
-			-webkit-box-shadow: inset 0px 0px 24px 0px $empty-shown-box-color-shadow;
-			-moz-box-shadow: inset 0px 0px 24px 0px $empty-shown-box-color-shadow;
-			box-shadow: inset 0px 0px 24px 0px $empty-shown-box-color-shadow;
+			background-color: var(--plates-color, $plates-color);
+			-webkit-box-shadow: inset 0px 0px 24px 0px $shown-box-color-shadow;
+			-moz-box-shadow: inset 0px 0px 24px 0px $shown-box-color-shadow;
+			box-shadow: inset 0px 0px 24px 0px $shown-box-color-shadow;
 			&::before {
 				content: '✹';
 				color: #000;
 			}
 		}
 		.show-trigger {
-			background-color: $empty-shown-box-color;
-			-webkit-box-shadow: inset 0px 0px 24px 0px $empty-shown-box-color-shadow;
-			-moz-box-shadow: inset 0px 0px 24px 0px $empty-shown-box-color-shadow;
-			box-shadow: inset 0px 0px 24px 0px $empty-shown-box-color-shadow;
+			background-color: var(--plates-color, $plates-color);
+			-webkit-box-shadow: inset 0px 0px 24px 0px $shown-box-color-shadow;
+			-moz-box-shadow: inset 0px 0px 24px 0px $shown-box-color-shadow;
+			box-shadow: inset 0px 0px 24px 0px $shown-box-color-shadow;
 			&::before {
 				content: '💥';
 			}

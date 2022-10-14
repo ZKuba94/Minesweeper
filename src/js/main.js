@@ -6,6 +6,7 @@ const helpList = navBar.querySelector('.navbar__list-help');
 const navItemsGame = gameList.querySelectorAll('.navbar__list__item');
 const navItemsOptions = optionsList.querySelectorAll('.navbar__list__item');
 const navItemsHelp = helpList.querySelectorAll('.navbar__list__item');
+const root = document.querySelector(':root');
 const counterMines = document.querySelector('.counter-mines');
 const counterTime = document.querySelector('.counter-time');
 const statusFace = document.querySelector('.game-box__bar__status-face');
@@ -299,8 +300,46 @@ const chooseLevel = e => {
 		gamePlate.classList.add('plate-expert');
 	}
 	navItemsGame.forEach(item => item.classList.toggle('navbar__list-game__item'));
-
 	newGame();
+};
+
+const changeTheme = e => {
+	if (e.target.classList.contains('first-theme')) {
+		root.style.setProperty('--linear', 'radial-gradient(91% 146%, #282b29 47%, #282b29 100%)');
+		root.style.setProperty('--items-color', '#626c66');
+		root.style.setProperty('--plates-color', '#d5c6e0');
+		root.style.setProperty('--border-color', '#434a42');
+		root.style.setProperty('--dark-font-color', '#000');
+		root.style.setProperty('--light-font-color', '#fff');
+	} else if (e.target.classList.contains('second-theme')) {
+		root.style.setProperty('--linear', 'radial-gradient(91% 146%, #c455a8 47%, #e5cdc8 100%)');
+		root.style.setProperty('--items-color', '#c455a8');
+		root.style.setProperty('--plates-color', '#d7a6b3');
+		root.style.setProperty('--border-color', '#14281d');
+		root.style.setProperty('--dark-font-color', '#000');
+		root.style.setProperty('--light-font-color', '#fff');
+	} else if (e.target.classList.contains('third-theme')) {
+		root.style.setProperty('--linear', 'radial-gradient(91% 146%, #1b2cc1 47%, #1b2cc1 100%)');
+		root.style.setProperty('--items-color', '#1b2cc1');
+		root.style.setProperty('--plates-color', '#7692ff');
+		root.style.setProperty('--border-color', '#091540');
+		root.style.setProperty('--dark-font-color', '#000');
+		root.style.setProperty('--light-font-color', '#fff');
+	} else if (e.target.classList.contains('fourth-theme')) {
+		root.style.setProperty('--linear', 'radial-gradient(91% 146%, #6ba292 47%, #ddd 100%)');
+		root.style.setProperty('--items-color', '#6ba292');
+		root.style.setProperty('--plates-color', '#6ba292');
+		root.style.setProperty('--border-color', '#080f0f');
+		root.style.setProperty('--dark-font-color', '#000');
+		root.style.setProperty('--light-font-color', '#fff');
+	} else if (e.target.classList.contains('fifth-theme')) {
+		root.style.setProperty('--linear', 'radial-gradient(91% 146%, #a1cca5 47%, #ddd 100%)');
+		root.style.setProperty('--items-color', '#415d43');
+		root.style.setProperty('--plates-color', '#709775');
+		root.style.setProperty('--border-color', '#111d13');
+		root.style.setProperty('--dark-font-color', '#000');
+		root.style.setProperty('--light-font-color', '#000');
+	}
 };
 
 const menuAction = e => {
@@ -966,6 +1005,7 @@ const noRightClickMenu = e => {
 //  Listeners
 
 navItemsGame.forEach(item => item.addEventListener('click', chooseLevel));
+navItemsOptions.forEach(item => item.addEventListener('click', changeTheme));
 document.addEventListener('click', menuAction);
 document.addEventListener('contextmenu', countMines);
 statusFace.addEventListener('click', newGame);
