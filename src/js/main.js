@@ -326,7 +326,7 @@ const changeTheme = e => {
 		root.style.setProperty('--border-color', '#091540');
 		root.style.setProperty('--dark-font-color', '#000');
 		root.style.setProperty('--light-font-color', '#fff');
-		root.style.setProperty('--flag', `'🪖'`);
+		root.style.setProperty('--flag', `'♟'`);
 	} else if (e.target.classList.contains('fourth-theme')) {
 		root.style.setProperty('--linear', 'radial-gradient(91% 146%, #6ba292 47%, #ddd 100%)');
 		root.style.setProperty('--items-color', '#6ba292');
@@ -334,7 +334,7 @@ const changeTheme = e => {
 		root.style.setProperty('--border-color', '#080f0f');
 		root.style.setProperty('--dark-font-color', '#000');
 		root.style.setProperty('--light-font-color', '#fff');
-		root.style.setProperty('--flag', `'🛟'`);
+		root.style.setProperty('--flag', `'🌴'`);
 	} else if (e.target.classList.contains('fifth-theme')) {
 		root.style.setProperty('--linear', 'radial-gradient(91% 146%, #a1cca5 47%, #ddd 100%)');
 		root.style.setProperty('--items-color', '#415d43');
@@ -342,7 +342,7 @@ const changeTheme = e => {
 		root.style.setProperty('--border-color', '#111d13');
 		root.style.setProperty('--dark-font-color', '#000');
 		root.style.setProperty('--light-font-color', '#000');
-		root.style.setProperty('--flag', `'🌳'`);
+		root.style.setProperty('--flag', `'🪵'`);
 	}
 };
 
@@ -793,6 +793,7 @@ const checkFlagsAround = (i, rowLength) => {
 const showFieldAfterDoubleClick = (j, k) => {
 	if (bombs.includes(k)) {
 		showEmptyForZeroBombs(j, chosenLevel[0]);
+		checkIfGameFinished();
 	} else {
 		plateElements[k].classList.add('wrong-bet');
 		// try to code something that makes nearest bomb trigger after wrong-bet and double click on number
@@ -989,6 +990,7 @@ const neutralFace = e => {
 const endGame = () => {
 	clearInterval(timer);
 	pauseTime();
+	counterMines.innerHTML = `000`;
 };
 
 const startGame = () => {
