@@ -7,6 +7,9 @@ const navItemsGame = gameList.querySelectorAll('.navbar__list__item');
 const navItemsOptions = optionsList.querySelectorAll('.navbar__list__item');
 const navItemsHelp = helpList.querySelectorAll('.navbar__list__item');
 const root = document.querySelector(':root');
+const popUpRules = document.querySelector('.popup-rules');
+const popUpHowToPlay = document.querySelector('.popup-how-to-play');
+const popUpBtns = document.querySelectorAll('.popup__close-btn');
 const counterMines = document.querySelector('.counter-mines');
 const counterTime = document.querySelector('.counter-time');
 const statusFace = document.querySelector('.game-box__bar__status-face');
@@ -328,8 +331,8 @@ const changeTheme = e => {
 		root.style.setProperty('--light-font-color', '#fff');
 		root.style.setProperty('--flag', `'♟'`);
 	} else if (e.target.classList.contains('fourth-theme')) {
-		root.style.setProperty('--linear', 'radial-gradient(91% 146%, #6ba292 47%, #ddd 100%)');
-		root.style.setProperty('--items-color', '#6ba292');
+		root.style.setProperty('--linear', 'radial-gradient(91% 146%, #387780 47%, #ddd 100%)');
+		root.style.setProperty('--items-color', '#387780');
 		root.style.setProperty('--plates-color', '#6ba292');
 		root.style.setProperty('--border-color', '#080f0f');
 		root.style.setProperty('--dark-font-color', '#000');
@@ -344,6 +347,19 @@ const changeTheme = e => {
 		root.style.setProperty('--light-font-color', '#000');
 		root.style.setProperty('--flag', `'🪵'`);
 	}
+};
+
+const openHelp = e => {
+	if (e.target.classList.contains('rules')) {
+		popUpRules.style.display = 'flex';
+	} else if (e.target.classList.contains('how-to-play')) {
+		popUpHowToPlay.style.display = 'flex';
+	}
+};
+
+const closeHelp = () => {
+	popUpRules.style.display = 'none';
+	popUpHowToPlay.style.display = 'none';
 };
 
 const menuAction = e => {
@@ -1017,6 +1033,8 @@ const noRightClickMenu = e => {
 
 navItemsGame.forEach(item => item.addEventListener('click', chooseLevel));
 navItemsOptions.forEach(item => item.addEventListener('click', changeTheme));
+navItemsHelp.forEach(item => item.addEventListener('click', openHelp));
+popUpBtns.forEach(item => item.addEventListener('click', closeHelp));
 document.addEventListener('click', menuAction);
 document.addEventListener('contextmenu', countMines);
 statusFace.addEventListener('click', newGame);
