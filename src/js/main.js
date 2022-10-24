@@ -337,21 +337,21 @@ const customPlate = () => {
 };
 const resultsHandler = () => {
 	if (chosenLevel === begginer) {
-		if (Number.parseFloat(resultBegginer.textContent) < Number.parseFloat(counterTime.textContent)) {
+		if (Number.parseFloat(resultBegginer.textContent) > Number.parseFloat(counterTime.textContent)) {
 			resultBegginer.innerHTML = `${Number(counterTime.textContent)} s`;
-		} else if ((resultBegginer.textContent = `You didn't finished this level yet.`)) {
+		} else if (resultBegginer.textContent === `You didn't finished this level yet.`) {
 			resultBegginer.innerHTML = `${Number(counterTime.textContent)} s`;
 		}
 	} else if (chosenLevel === intermediate) {
-		if (Number.parseFloat(resultIntermediate.textContent) < Number.parseFloat(counterTime.textContent)) {
+		if (Number.parseFloat(resultIntermediate.textContent) > Number.parseFloat(counterTime.textContent)) {
 			resultIntermediate.innerHTML = `${Number(counterTime.textContent)} s`;
-		} else if ((resultIntermediate.textContent = `You didn't finished this level yet.`)) {
+		} else if (resultIntermediate.textContent === `You didn't finished this level yet.`) {
 			resultIntermediate.innerHTML = `${Number(counterTime.textContent)} s`;
 		}
 	} else if (chosenLevel === expert) {
-		if (Number.parseFloat(resultExpert.textContent) < Number.parseFloat(counterTime.textContent)) {
+		if (Number.parseFloat(resultExpert.textContent) > Number.parseFloat(counterTime.textContent)) {
 			resultExpert.innerHTML = `${Number(counterTime.textContent)} s`;
-		} else if ((resultExpert.textContent = `You didn't finished this level yet.`)) {
+		} else if (resultExpert.textContent === `You didn't finished this level yet.`) {
 			resultExpert.innerHTML = `${Number(counterTime.textContent)} s`;
 		}
 	}
