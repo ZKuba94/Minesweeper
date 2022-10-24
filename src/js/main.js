@@ -6,10 +6,15 @@ const helpList = navBar.querySelector('.navbar__list-help');
 const navItemsGame = gameList.querySelectorAll('.navbar__list__item');
 const navItemsOptions = optionsList.querySelectorAll('.navbar__list__item');
 const navItemsHelp = helpList.querySelectorAll('.navbar__list__item');
+const popUpCustom = document.querySelector('.popup-custom');
+const customBtn = document.querySelector('.popup__custom-btn');
 const root = document.querySelector(':root');
 const popUpRules = document.querySelector('.popup-rules');
 const popUpHowToPlay = document.querySelector('.popup-how-to-play');
 const popUpBtns = document.querySelectorAll('.popup__close-btn');
+const columns = document.querySelector('#columns');
+const rows = document.querySelector('#rows');
+const mines = document.querySelector('#mines');
 const counterMines = document.querySelector('.counter-mines');
 const counterTime = document.querySelector('.counter-time');
 const statusFace = document.querySelector('.game-box__bar__status-face');
@@ -17,6 +22,7 @@ const plateElements = gamePlate.getElementsByClassName('game-box__plate__element
 const begginer = [8, 8, 10];
 const intermediate = [16, 16, 40];
 const expert = [31, 16, 99];
+let custom = [];
 let bombs = [];
 let boxes = [];
 let bombsIndexes = [];
@@ -27,8 +33,6 @@ let flagsCounter = 0;
 let seconds = 0;
 let timer;
 let chosenLevel = begginer;
-
-// Things to improve : After double click at the end, if you lose, show trigger on bomb that you didn't spoted by flag and it cause lose.
 
 // Function to run before first play
 
@@ -289,20 +293,42 @@ const chooseLevel = e => {
 		chosenLevel = begginer;
 		gamePlate.classList.remove('plate-intermediate');
 		gamePlate.classList.remove('plate-expert');
+		gamePlate.classList.remove('plate-custom');
 		gamePlate.classList.add('plate-begginer');
 	} else if (e.target.classList.contains('intermediate')) {
 		chosenLevel = intermediate;
 		gamePlate.classList.remove('plate-begginer');
 		gamePlate.classList.remove('plate-expert');
+		gamePlate.classList.remove('plate-custom');
 		gamePlate.classList.add('plate-intermediate');
 	} else if (e.target.classList.contains('expert')) {
 		chosenLevel = expert;
 		gamePlate.classList.remove('plate-begginer');
 		gamePlate.classList.remove('plate-intermediate');
+		gamePlate.classList.remove('plate-custom');
 		gamePlate.classList.add('plate-expert');
+	} else if (e.target.classList.contains('custom')) {
+		popUpCustom.style.display = 'flex';
 	}
 	navItemsGame.forEach(item => item.classList.toggle('navbar__list-game__item'));
 	newGame();
+};
+const customPlate = () => {
+	if (columns.value !== '' && rows.value !== '' && mines.value !== '') {
+		custom = [];
+		custom.push(Number.parseFloat(columns.value));
+		custom.push(Number.parseFloat(rows.value));
+		custom.push(Number.parseFloat(mines.value));
+		root.style.setProperty('--custom-columns', custom[0]);
+		root.style.setProperty('--custom-rows', custom[1]);
+		chosenLevel = custom;
+		gamePlate.classList.remove('plate-begginer');
+		gamePlate.classList.remove('plate-intermediate');
+		gamePlate.classList.remove('plate-expert');
+		gamePlate.classList.add('plate-custom');
+		popUpCustom.style.display = 'none';
+		newGame();
+	}
 };
 
 const changeTheme = e => {
@@ -360,6 +386,7 @@ const openHelp = e => {
 const closeHelp = () => {
 	popUpRules.style.display = 'none';
 	popUpHowToPlay.style.display = 'none';
+	popUpCustom.style.display = 'none';
 };
 
 const menuAction = e => {
@@ -1035,6 +1062,7 @@ navItemsGame.forEach(item => item.addEventListener('click', chooseLevel));
 navItemsOptions.forEach(item => item.addEventListener('click', changeTheme));
 navItemsHelp.forEach(item => item.addEventListener('click', openHelp));
 popUpBtns.forEach(item => item.addEventListener('click', closeHelp));
+customBtn.addEventListener('click', customPlate);
 document.addEventListener('click', menuAction);
 document.addEventListener('contextmenu', countMines);
 statusFace.addEventListener('click', newGame);
