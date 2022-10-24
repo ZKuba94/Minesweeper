@@ -16,7 +16,6 @@
 <body>
 
     <div class="main-site"><a href="https://zkuba94.github.io/My-Site/">Main Page</a></div>
-
     <div class="popup-rules">
         <div class="popup-rules__top-bar">
             <button class="popup__close-btn">X</button>
@@ -30,7 +29,6 @@
             <button class="popup__close-btn">OK</button>
         </div>
     </div>
-
     <div class="popup-how-to-play">
         <div class="popup-how-to-play__top-bar">
             <button class="popup__close-btn">X</button>
@@ -54,16 +52,36 @@
             <h2 class="popup-custom__content__title">Choose your game plate</h2>
             <div class="popup-custom__content__inputs">
                 <label for="columns">Number of columns:</label>
-                <input id="columns" type="number">
+                <input id="columns" type="number" min="1" max="50">
                 <label for="rows">Number of rows:</label>
-                <input id="rows" type="number">
+                <input id="rows" type="number" min="1" max="50">
                 <label for="mines">Number of mines:</label>
-                <input id="mines" type="number">
+                <input id="mines" type="number" min="1" max="999">
                 <button class="popup__custom-btn">OK</button>
             </div>
         </div>
     </div>
-
+    <div class="popup-results">
+        <div class="popup-results__top-bar">
+            <button class="popup__close-btn">X</button>
+        </div>
+        <div class="popup-results__content">
+            <h2 class="popup-results__content__title">Best Results</h2>
+            <p class="popup-results__content__text">
+                <strong>Begginer:</strong>
+                <span class="result-begginer">You didn't finished this level yet.</span>
+            </p>
+            <p class="popup-results__content__text">
+                <strong>Intermediate:</strong>
+                <span class="result-intermediate">You didn't finished this level yet.</span>
+            </p>
+            <p class="popup-results__content__text">
+                <strong>Expert:</strong>
+                <span class="result-expert">You didn't finished this level yet.</span>
+            </p>
+            <button class="popup__close-btn">OK</button>
+        </div>
+    </div>
     <!-- Folded menu with some options -->
     <div class="wrapper">
         <h1 class="title">Simple Minesweeper</h1>
@@ -74,7 +92,7 @@
                 <li class="navbar__list__item intermediate">Intermediate</li>
                 <li class="navbar__list__item expert">Expert</li>
                 <li class="navbar__list__item custom">Custom</li>
-                <li class="navbar__list__item">Best Results</li>
+                <li class="navbar__list__item results">Best Results</li>
             </ul>
             <ul class="navbar__list navbar__list-options">
                 <li class="navbar__list__item first-theme">Dark Grey</li>

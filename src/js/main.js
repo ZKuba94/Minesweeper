@@ -9,6 +9,10 @@ const navItemsHelp = helpList.querySelectorAll('.navbar__list__item');
 const popUpCustom = document.querySelector('.popup-custom');
 const customBtn = document.querySelector('.popup__custom-btn');
 const root = document.querySelector(':root');
+const popUpResults = document.querySelector('.popup-results');
+const resultBegginer = document.querySelector('.result-begginer');
+const resultIntermediate = document.querySelector('.result-intermediate');
+const resultExpert = document.querySelector('.result-expert');
 const popUpRules = document.querySelector('.popup-rules');
 const popUpHowToPlay = document.querySelector('.popup-how-to-play');
 const popUpBtns = document.querySelectorAll('.popup__close-btn');
@@ -286,32 +290,41 @@ const clearPlate = () => {
 };
 // Navigation things, option, new game, select level...
 const chooseLevel = e => {
-	clearPlate();
 	if (e.target.textContent === 'New Game') {
+		clearPlate();
 		newGame();
 	} else if (e.target.classList.contains('begginer')) {
+		clearPlate();
 		chosenLevel = begginer;
 		gamePlate.classList.remove('plate-intermediate');
 		gamePlate.classList.remove('plate-expert');
 		gamePlate.classList.remove('plate-custom');
 		gamePlate.classList.add('plate-begginer');
+		newGame();
 	} else if (e.target.classList.contains('intermediate')) {
+		clearPlate();
 		chosenLevel = intermediate;
 		gamePlate.classList.remove('plate-begginer');
 		gamePlate.classList.remove('plate-expert');
 		gamePlate.classList.remove('plate-custom');
 		gamePlate.classList.add('plate-intermediate');
+		newGame();
 	} else if (e.target.classList.contains('expert')) {
+		clearPlate();
 		chosenLevel = expert;
 		gamePlate.classList.remove('plate-begginer');
 		gamePlate.classList.remove('plate-intermediate');
 		gamePlate.classList.remove('plate-custom');
 		gamePlate.classList.add('plate-expert');
+		newGame();
 	} else if (e.target.classList.contains('custom')) {
+		clearPlate();
 		popUpCustom.style.display = 'flex';
+		newGame();
+	} else if (e.target.classList.contains('results')) {
+		popUpResults.style.display = 'flex';
 	}
 	navItemsGame.forEach(item => item.classList.toggle('navbar__list-game__item'));
-	newGame();
 };
 const customPlate = () => {
 	if (columns.value !== '' && rows.value !== '' && mines.value !== '') {
@@ -330,7 +343,27 @@ const customPlate = () => {
 		newGame();
 	}
 };
-
+const resultsHandler = () => {
+	if (chosenLevel === begginer) {
+		if (Number.parseFloat(resultBegginer.textContent) < Number.parseFloat(counterTime.textContent)) {
+			resultBegginer.innerHTML = `${Number(counterTime.textContent)} s`;
+		} else if ((resultBegginer.textContent = `You didn't finished this level yet.`)) {
+			resultBegginer.innerHTML = `${Number(counterTime.textContent)} s`;
+		}
+	} else if (chosenLevel === intermediate) {
+		if (Number.parseFloat(resultBegginer.textContent) < Number.parseFloat(counterTime.textContent)) {
+			resultIntermediate.innerHTML = `${Number(counterTime.textContent)} s`;
+		} else if ((resultBegginer.textContent = `You didn't finished this level yet.`)) {
+			resultBegginer.innerHTML = `${Number(counterTime.textContent)} s`;
+		}
+	} else if (chosenLevel === expert) {
+		if (Number.parseFloat(resultBegginer.textContent) < Number.parseFloat(counterTime.textContent)) {
+			resultExpert.innerHTML = `${Number(counterTime.textContent)} s`;
+		} else if ((resultBegginer.textContent = `You didn't finished this level yet.`)) {
+			resultBegginer.innerHTML = `${Number(counterTime.textContent)} s`;
+		}
+	}
+};
 const changeTheme = e => {
 	if (e.target.classList.contains('first-theme')) {
 		root.style.setProperty('--linear', 'radial-gradient(91% 146%, #282b29 47%, #282b29 100%)');
@@ -383,10 +416,11 @@ const openHelp = e => {
 	}
 };
 
-const closeHelp = () => {
+const closePopUp = () => {
 	popUpRules.style.display = 'none';
 	popUpHowToPlay.style.display = 'none';
 	popUpCustom.style.display = 'none';
+	popUpResults.style.display = 'none';
 };
 
 const menuAction = e => {
@@ -639,6 +673,7 @@ const checkIfGameFinished = () => {
 				plateElements[i].classList.add('put-flag');
 			}
 		}
+		resultsHandler();
 		endGame();
 	}
 };
@@ -993,7 +1028,6 @@ const checkAfterDoubleClick = (e, rowLength) => {
 };
 
 const doubleClick = e => {
-	let k = Number.parseFloat(e.target.id);
 	if (e.target.classList.contains('show-number')) {
 		flagsNumber = 0;
 		checkFlagsAround(Number.parseFloat(e.target.id), chosenLevel[0]);
@@ -1061,11 +1095,12 @@ const noRightClickMenu = e => {
 navItemsGame.forEach(item => item.addEventListener('click', chooseLevel));
 navItemsOptions.forEach(item => item.addEventListener('click', changeTheme));
 navItemsHelp.forEach(item => item.addEventListener('click', openHelp));
-popUpBtns.forEach(item => item.addEventListener('click', closeHelp));
+popUpBtns.forEach(item => item.addEventListener('click', closePopUp));
 customBtn.addEventListener('click', customPlate);
 document.addEventListener('click', menuAction);
 document.addEventListener('contextmenu', countMines);
 statusFace.addEventListener('click', newGame);
+// statusFace.addEventListener('change', resultsHandler);
 const playTime = () => {
 	gamePlate.addEventListener('contextmenu', putFlag);
 	gamePlate.addEventListener('click', leftClickCheckField);
