@@ -39,11 +39,9 @@ let timer;
 let chosenLevel = begginer;
 
 // Function to run before first play
-
 const countFields = chosenLevel => {
 	return chosenLevel[0] * chosenLevel[1];
 };
-
 const shuffle = (boxesAmount, bombsAmount) => {
 	for (let i = 0; i < bombsAmount; i++) {
 		let randomNum = Math.floor(Math.random() * boxesAmount);
@@ -54,7 +52,6 @@ const shuffle = (boxesAmount, bombsAmount) => {
 		}
 	}
 };
-
 class GamePlate {
 	constructor(id, bomb, bombsAround, bombsIndexes) {
 		this.id = id;
@@ -63,7 +60,6 @@ class GamePlate {
 		this.bombsIndexes = bombsIndexes;
 	}
 }
-
 const createGamePlate = boxesAmount => {
 	for (let i = 0; i < boxesAmount; i++) {
 		boxes[i] = new GamePlate(i, false, bombsNumber, bombsIndexes);
@@ -73,7 +69,6 @@ const createGamePlate = boxesAmount => {
 		bombsNumber = 0;
 	}
 };
-
 const checkBombsAround = (i, rowLength) => {
 	if (i === 0) {
 		// top-left corner check
@@ -255,7 +250,6 @@ const checkBombsAround = (i, rowLength) => {
 		}
 	}
 };
-
 const plantBombs = () => {
 	boxes.forEach(box => {
 		if (bombs.includes(box.id)) {
@@ -263,7 +257,6 @@ const plantBombs = () => {
 		}
 	});
 };
-
 const drawGamePlate = boxesAmount => {
 	for (let i = 0; i < boxesAmount; i++) {
 		let emptyBox = document.createElement('div');
@@ -274,7 +267,6 @@ const drawGamePlate = boxesAmount => {
 	counterMines.innerHTML = `0${chosenLevel[2]}`;
 	// tu moze forEachemptyBox
 };
-
 const clearPlate = () => {
 	gamePlate.innerHTML = '';
 	counterTime.innerHTML = `000`;
@@ -351,16 +343,16 @@ const resultsHandler = () => {
 			resultBegginer.innerHTML = `${Number(counterTime.textContent)} s`;
 		}
 	} else if (chosenLevel === intermediate) {
-		if (Number.parseFloat(resultBegginer.textContent) < Number.parseFloat(counterTime.textContent)) {
+		if (Number.parseFloat(resultIntermediate.textContent) < Number.parseFloat(counterTime.textContent)) {
 			resultIntermediate.innerHTML = `${Number(counterTime.textContent)} s`;
-		} else if ((resultBegginer.textContent = `You didn't finished this level yet.`)) {
-			resultBegginer.innerHTML = `${Number(counterTime.textContent)} s`;
+		} else if ((resultIntermediate.textContent = `You didn't finished this level yet.`)) {
+			resultIntermediate.innerHTML = `${Number(counterTime.textContent)} s`;
 		}
 	} else if (chosenLevel === expert) {
-		if (Number.parseFloat(resultBegginer.textContent) < Number.parseFloat(counterTime.textContent)) {
+		if (Number.parseFloat(resultExpert.textContent) < Number.parseFloat(counterTime.textContent)) {
 			resultExpert.innerHTML = `${Number(counterTime.textContent)} s`;
-		} else if ((resultBegginer.textContent = `You didn't finished this level yet.`)) {
-			resultBegginer.innerHTML = `${Number(counterTime.textContent)} s`;
+		} else if ((resultExpert.textContent = `You didn't finished this level yet.`)) {
+			resultExpert.innerHTML = `${Number(counterTime.textContent)} s`;
 		}
 	}
 };
@@ -407,7 +399,6 @@ const changeTheme = e => {
 		root.style.setProperty('--flag', `'🪵'`);
 	}
 };
-
 const openHelp = e => {
 	if (e.target.classList.contains('rules')) {
 		popUpRules.style.display = 'flex';
@@ -415,14 +406,12 @@ const openHelp = e => {
 		popUpHowToPlay.style.display = 'flex';
 	}
 };
-
 const closePopUp = () => {
 	popUpRules.style.display = 'none';
 	popUpHowToPlay.style.display = 'none';
 	popUpCustom.style.display = 'none';
 	popUpResults.style.display = 'none';
 };
-
 const menuAction = e => {
 	if (
 		e.target.classList.contains('navbar__list-game') ||
@@ -436,7 +425,6 @@ const menuAction = e => {
 		navItemsHelp.forEach(item => item.classList.remove('navbar__list-help__item'));
 	}
 };
-
 const unfoldMenu = e => {
 	if (e.target.classList.contains('navbar__list-game')) {
 		navItemsGame.forEach(item => item.classList.toggle('navbar__list-game__item'));
@@ -452,7 +440,6 @@ const unfoldMenu = e => {
 		navItemsOptions.forEach(item => item.classList.remove('navbar__list-options__item'));
 	}
 };
-// Inner bar things, counters and status face
 const countMines = e => {
 	if (chosenLevel[2] - flagsCounter < 10) {
 		counterMines.innerHTML = `00${chosenLevel[2] - flagsCounter}`;
@@ -482,7 +469,6 @@ const putFlag = e => {
 		}
 	}
 };
-
 const newGame = () => {
 	endGame();
 	playTime();
@@ -493,7 +479,6 @@ const newGame = () => {
 	plantBombs();
 	drawGamePlate(countFields(chosenLevel));
 };
-
 const showAllFieldsWrongBet = () => {
 	for (const box of boxes) {
 		if (box.bomb === true) {
@@ -508,7 +493,6 @@ const showAllFieldsWrongBet = () => {
 		}
 	}
 };
-
 const showEmptyForZeroBombs = (i, rowLength) => {
 	if (i === 0) {
 		// top-left corner
@@ -650,7 +634,6 @@ const showEmptyForZeroBombs = (i, rowLength) => {
 		}
 	}
 };
-
 const checkIfGameFinished = () => {
 	if (counterToFinishGame === 0) {
 		startGame();
@@ -677,7 +660,6 @@ const checkIfGameFinished = () => {
 		endGame();
 	}
 };
-
 const showEmpty = (i, rowLength) => {
 	if (!plateElements[i].classList.contains('put-flag')) {
 		if (boxes[i].bombsAround === 0) {
@@ -711,7 +693,6 @@ const showEmpty = (i, rowLength) => {
 	}
 	checkIfGameFinished();
 };
-
 const leftClickCheckField = e => {
 	if (e.button === 0) {
 		if (e.target.classList.contains('put-flag')) {
@@ -725,7 +706,6 @@ const leftClickCheckField = e => {
 		checkIfGameFinished();
 	}
 };
-
 const checkFlagsAround = (i, rowLength) => {
 	if (i === 0) {
 		// top-left corner
@@ -867,7 +847,6 @@ const checkFlagsAround = (i, rowLength) => {
 		}
 	}
 };
-
 const showFieldAfterDoubleClick = (j, k) => {
 	if (bombs.includes(k)) {
 		showEmptyForZeroBombs(j, chosenLevel[0]);
@@ -881,7 +860,6 @@ const showFieldAfterDoubleClick = (j, k) => {
 		checkIfGameFinished();
 	}
 };
-
 const checkAfterDoubleClick = (e, rowLength) => {
 	if (boxes[e.target.id].bombsAround === boxes[e.target.id].bombsIndexes.length) {
 		let j = Number.parseFloat(e.target.id);
@@ -1026,7 +1004,6 @@ const checkAfterDoubleClick = (e, rowLength) => {
 		}
 	}
 };
-
 const doubleClick = e => {
 	if (e.target.classList.contains('show-number')) {
 		flagsNumber = 0;
@@ -1051,25 +1028,21 @@ const doubleClick = e => {
 		}
 	}
 };
-
 const uncertainFace = e => {
 	if (e.button === 0) {
 		statusFace.classList.add('status-face-wow');
 	}
 };
-
 const neutralFace = e => {
 	if (e.button === 0) {
 		statusFace.classList.remove('status-face-wow');
 	}
 };
-
 const endGame = () => {
 	clearInterval(timer);
 	pauseTime();
 	counterMines.innerHTML = `000`;
 };
-
 const startGame = () => {
 	clearInterval(timer);
 	timer = setInterval(() => {
@@ -1085,13 +1058,10 @@ const startGame = () => {
 		}
 	}, 1000);
 };
-
 const noRightClickMenu = e => {
 	e.preventDefault();
 };
-
 //  Listeners
-
 navItemsGame.forEach(item => item.addEventListener('click', chooseLevel));
 navItemsOptions.forEach(item => item.addEventListener('click', changeTheme));
 navItemsHelp.forEach(item => item.addEventListener('click', openHelp));
@@ -1100,7 +1070,6 @@ customBtn.addEventListener('click', customPlate);
 document.addEventListener('click', menuAction);
 document.addEventListener('contextmenu', countMines);
 statusFace.addEventListener('click', newGame);
-// statusFace.addEventListener('change', resultsHandler);
 const playTime = () => {
 	gamePlate.addEventListener('contextmenu', putFlag);
 	gamePlate.addEventListener('click', leftClickCheckField);
