@@ -335,24 +335,45 @@ const customPlate = () => {
 		newGame();
 	}
 };
+const checkResults = () => {
+	let begginer = localStorage.getItem('resultBegginer');
+	let intermediate = localStorage.getItem('resultIntermediate');
+	let expert = localStorage.getItem('resultExpert');
+
+	if (begginer !== null) {
+		resultBegginer.innerHTML = begginer;
+	}
+	if (intermediate !== null) {
+		resultIntermediate.innerHTML = intermediate;
+	}
+	if (expert !== null) {
+		resultExpert.innerHTML = expert;
+	}
+};
 const resultsHandler = () => {
 	if (chosenLevel === begginer) {
 		if (Number.parseFloat(resultBegginer.textContent) > Number.parseFloat(counterTime.textContent)) {
 			resultBegginer.innerHTML = `${Number(counterTime.textContent)} s`;
+			localStorage.setItem('resultBegginer', resultBegginer.innerHTML);
 		} else if (resultBegginer.textContent === `You didn't finished this level yet.`) {
 			resultBegginer.innerHTML = `${Number(counterTime.textContent)} s`;
+			localStorage.setItem('resultBegginer', resultBegginer.innerHTML);
 		}
 	} else if (chosenLevel === intermediate) {
 		if (Number.parseFloat(resultIntermediate.textContent) > Number.parseFloat(counterTime.textContent)) {
 			resultIntermediate.innerHTML = `${Number(counterTime.textContent)} s`;
+			localStorage.setItem('resultIntermediate', resultIntermediate.innerHTML);
 		} else if (resultIntermediate.textContent === `You didn't finished this level yet.`) {
 			resultIntermediate.innerHTML = `${Number(counterTime.textContent)} s`;
+			localStorage.setItem('resultIntermediate', resultIntermediate.innerHTML);
 		}
 	} else if (chosenLevel === expert) {
 		if (Number.parseFloat(resultExpert.textContent) > Number.parseFloat(counterTime.textContent)) {
 			resultExpert.innerHTML = `${Number(counterTime.textContent)} s`;
+			localStorage.setItem('resultExpert', resultExpert.innerHTML);
 		} else if (resultExpert.textContent === `You didn't finished this level yet.`) {
 			resultExpert.innerHTML = `${Number(counterTime.textContent)} s`;
+			localStorage.setItem('resultExpert', resultExpert.innerHTML);
 		}
 	}
 };
@@ -1090,3 +1111,4 @@ const pauseTime = () => {
 	gamePlate.addEventListener('contextmenu', noRightClickMenu);
 };
 newGame();
+checkResults();
